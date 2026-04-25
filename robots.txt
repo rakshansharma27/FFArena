@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ffarena.live/sitemap.xml
+Host: ffarena.live

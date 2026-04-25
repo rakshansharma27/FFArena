@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>FF Arena Sitemap</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            font-family: monospace;
+            background: #020408;
+            color: #39FF14;
+            padding: 20px;
+            font-size: 13px
+        }
+
+        .status {
+            margin-bottom: 10px;
+            color: #00F0FF
+        }
+
+        .count {
+            color: #FFD700
+        }
+
+        pre {
+            background: #0a0f1a;
+            border: 1px solid rgba(57, 255, 20, 0.2);
+            border-radius: 8px;
+            padding: 16px;
+            overflow-x: auto;
+            font-size: 11px;
+            line-height: 1.6;
+            color: #A0B1C8;
+            max-height: 400px;
+            overflow-y: auto
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #39FF14, #00CC11);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            margin: 8px 4px 8px 0;
+            text-decoration: none
+        }
+
+        .btn:hover {
+            opacity: 0.85
+        }
+
+        .btn-copy {
+            background: linear-gradient(135deg, #00F0FF, #0088FF)
+        }
+
+        .btn-dl {
+            background: linear-gradient(135deg, #FFD700, #FF8C00)
+        }
+
+        h1 {
+            font-size: 18px;
+            margin-bottom: 4px;
+            color: #FF6B00;
+            letter-spacing: 2px;
+            text-transform: uppercase
+        }
+
+        p {
+            color: #6B7A8F;
+            font-size: 12px;
+            margin-bottom: 16px
+        }
+
+        .error {
+            color: #ff6b6b
+        }
+
+        .instruction {
+            background: rgba(0, 240, 255, 0.05);
+            border: 1px solid rgba(0, 240, 255, 0.15);
+            border-radius: 10px;
+            padding: 16px;
+            margin-top: 20px;
+            font-size: 12px;
+            line-height: 1.8;
+            color: #A0B1C8
+        }
+
+        .instruction strong {
+            color: #00F0FF
+        }
+
+        .instruction code {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #39FF14
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>🗺️ FF Arena — Dynamic Sitemap</h1>
+    <p>Auto-generated from live Supabase data. Updates every time you visit this page.</p>
+
+    <div class="status" id="status">⏳ Fetching data from database...</div>
+
+    <div id="btnRow" style="display:none">
+        <button class="btn btn-copy" onclick="copySitemap()">📋 Copy XML</button>
+        <button class="btn btn-dl" onclick="downloadSitemap()">⬇️ Download sitemap.xml</button>
+        <a class="btn" href="https://search.google.com/search-console" target="_blank">🔍 Submit to Google</a>
+    </div>
+
+    <pre id="xmlOutput"></pre>
+
+    <div class="instruction">
+        <strong>How to use this dynamic sitemap:</strong><br><br>
+        <strong>Option 1 — Replace manually (easiest):</strong><br>
+        Click <strong>Download sitemap.xml</strong> above → replace the file in your project → deploy to Cloudflare. Do
+        this every time you publish new content.<br><br>
+        <strong>Option 2 — Point Google here (best):</strong><br>
+        Go to <strong>Google Search Console → Sitemaps</strong> → remove old sitemap → add:<br>
+        <code>https://ffarena.live/sitemap-dynamic.html</code><br>
+        Google will read this page and extract the XML automatically.<br><br>
+        <strong>Option 3 — Auto ping Google after publishing (advanced):</strong><br>
+        After saving a news post in admin dashboard, this URL pings Google:<br>
+        <code>https://www.google.com/ping?sitemap=https://ffarena.live/sitemap-dynamic.html</code>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://fjjmlmxxbdacqmzntkvb.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZqam1sbXh4YmRhY3Ftem50a3ZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM3MzA5MzksImV4cCI6MjA4OTMwNjkzOX0.dLMbrDMbruDyzEbmnFhHIYJqt3OLwwjEz36SAbF93uI';
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const BASE = 'https://ffarena.live';
+        const TODAY = new Date().toISOString().slice(0, 10);
+
+        let generatedXML = '';
+
+        // ── STATIC PAGES ──────────────────────────────────
+        const STATIC = [
+            { url: '/', priority: '1.0', changefreq: 'daily' },
+            { url: '/news.html', priority: '0.9', changefreq: 'daily' },
+            { url: '/leaderboard.html', priority: '0.8', changefreq: 'hourly' },
+            { url: '/organizers.html', priority: '0.8', changefreq: 'daily' },
+            { url: '/lfg.html', priority: '0.7', changefreq: 'daily' },
+            { url: '/about.html', priority: '0.6', changefreq: 'monthly' },
+            { url: '/contact.html', priority: '0.5', changefreq: 'monthly' },
+            { url: '/promote.html', priority: '0.6', changefreq: 'weekly' },
+            { url: '/terms.html', priority: '0.3', changefreq: 'yearly' },
+            { url: '/privacy.html', priority: '0.3', changefreq: 'yearly' },
+        ];
+
+        async function generate() {
+            const statusEl = document.getElementById('status');
+
+            try {
+                // ── FETCH ALL DATA IN PARALLEL ──
+                statusEl.textContent = '⏳ Loading news, tournaments, organizers...';
+
+                const [newsRes, toursRes, orgsRes] = await Promise.all([
+                    sb.from('news')
+                        .select('slug, id, title, updated_at, created_at')
+                        .order('created_at', { ascending: false }),
+                    sb.from('tournaments')
+                        .select('id, name, updated_at, created_at, status')
+                        .order('created_at', { ascending: false }),
+                    sb.from('organizer_profiles')
+                        .select('id, org_name, updated_at, created_at')
+                        .eq('is_public', true)
+                        .order('created_at', { ascending: false }),
+                ]);
+
+                const news = newsRes.data || [];
+                const tours = toursRes.data || [];
+                const orgs = orgsRes.data || [];
+
+                // ── BUILD XML ──
+                const urls = [];
+
+                // Static pages
+                STATIC.forEach(p => {
+                    urls.push(`
+  <url>
+    <loc>${BASE}${p.url}</loc>
+    <lastmod>${TODAY}</lastmod>
+    <changefreq>${p.changefreq}</changefreq>
+    <priority>${p.priority}</priority>
+  </url>`);
+                });
+
+                // News posts
+                news.forEach(n => {
+                    const slug = n.slug || n.id;
+                    const lastmod = (n.updated_at || n.created_at || TODAY).slice(0, 10);
+                    urls.push(`
+  <url>
+    <loc>${BASE}/post.html?id=${slug}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>`);
+                });
+
+                // Tournaments
+                tours.forEach(t => {
+                    const lastmod = (t.updated_at || t.created_at || TODAY).slice(0, 10);
+                    const priority = t.status === 'live' ? '0.9' : t.status === 'open' ? '0.8' : '0.6';
+                    const freq = t.status === 'live' ? 'hourly' : t.status === 'open' ? 'daily' : 'weekly';
+                    urls.push(`
+  <url>
+    <loc>${BASE}/tournament.html?id=${t.id}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>${freq}</changefreq>
+    <priority>${priority}</priority>
+  </url>`);
+                });
+
+                // Organizer profiles
+                orgs.forEach(o => {
+                    const lastmod = (o.updated_at || o.created_at || TODAY).slice(0, 10);
+                    urls.push(`
+  <url>
+    <loc>${BASE}/organizer.html?id=${o.id}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>`);
+                });
+
+                // ── ASSEMBLE FULL XML ──
+                generatedXML = `<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="sitemap.xsl"?>
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+    http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+${urls.join('')}
+</urlset>`;
+
+                // ── DISPLAY ──
+                document.getElementById('xmlOutput').textContent = generatedXML;
+
+                const total = STATIC.length + news.length + tours.length + orgs.length;
+                statusEl.innerHTML = `✅ Sitemap generated — <span class="count">${total} URLs total</span>
+      &nbsp;·&nbsp; <span class="count">${STATIC.length}</span> static
+      &nbsp;·&nbsp; <span class="count">${news.length}</span> news
+      &nbsp;·&nbsp; <span class="count">${tours.length}</span> tournaments
+      &nbsp;·&nbsp; <span class="count">${orgs.length}</span> organizers
+      &nbsp;·&nbsp; Generated: ${new Date().toLocaleString('en-IN')}`;
+
+                document.getElementById('btnRow').style.display = 'block';
+
+            } catch (err) {
+                statusEl.innerHTML = `<span class="error">❌ Error: ${err.message}</span>`;
+                console.error(err);
+            }
+        }
+
+        function copySitemap() {
+            navigator.clipboard.writeText(generatedXML).then(() => {
+                const btn = document.querySelector('.btn-copy');
+                btn.textContent = '✅ Copied!';
+                setTimeout(() => btn.textContent = '📋 Copy XML', 2000);
+            });
+        }
+
+        function downloadSitemap() {
+            const blob = new Blob([generatedXML], { type: 'application/xml' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'sitemap.xml';
+            a.click();
+            URL.revokeObjectURL(a.href);
+        }
+
+        // Run on page load
+        generate();
+    </script>
+</body>
+
+</html>

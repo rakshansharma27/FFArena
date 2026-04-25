@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About - FF Arena</title>
+  <link rel="stylesheet" href="assets/css/app.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      background-color: var(--bg-dark);
+      min-height: 100vh;
+      margin: 0;
+      padding-top: 80px;
+    }
+
+    .public-nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(11, 12, 16, 0.9);
+      backdrop-filter: blur(10px);
+      padding: 15px 20px;
+      z-index: 100;
+      border-bottom: 1px solid var(--border-glass);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .about-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: center;
+      max-width: 1000px;
+      margin: 0 auto 80px;
+    }
+
+    .about-text h1 {
+      font-size: 3.5rem;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+
+    .about-text p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+      line-height: 1.8;
+    }
+
+    .about-img {
+      background: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&q=80') center/cover;
+      height: 500px;
+      border-radius: 20px;
+      border: 1px solid var(--primary-cyan);
+      box-shadow: 0 0 30px rgba(0, 242, 254, 0.2);
+    }
+
+    .founder-box {
+      background: linear-gradient(135deg, rgba(20, 22, 30, 0.8) 0%, rgba(170, 0, 255, 0.1) 100%);
+      border: 1px solid var(--border-glass);
+      border-radius: 16px;
+      padding: 40px;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 80px;
+    }
+
+    .founder-img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 3px solid #aa00ff;
+      margin-bottom: 20px;
+      object-fit: cover;
+    }
+
+    @media (max-width: 768px) {
+      .about-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .about-img {
+        height: 300px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="public-nav">
+    <a href="index.html" class="logo">FF <span class="text-gradient">ARENA</span></a>
+  </nav>
+
+  <main class="container">
+    <div class="about-layout animate-fade-up">
+      <div class="about-text">
+        <h1>Built by Gamers, <span class="text-gradient">For Gamers.</span></h1>
+        <p>FF Arena was born out of a simple frustration: participating in local Free Fire MAX tournaments was too
+          chaotic. WhatsApp groups, manual payment screenshots, delayed prize money, and unfair matchmaking ruined the
+          competitive experience.</p>
+        <p>We built this platform to bring professional esports infrastructure to the grassroots level in India. Instant
+          wallets, automated leaderboards, and a verified organizer system ensure you spend less time waiting and more
+          time securing Booyahs.</p>
+      </div>
+      <div class="about-img"></div>
+    </div>
+
+    <div class="founder-box animate-fade-up delay-1">
+      <img src="https://ui-avatars.com/api/?name=Rakshan+Sharma&background=aa00ff&color=fff" class="founder-img">
+      <h2 style="color: #fff; font-family: var(--font-heading); margin-bottom: 5px;">Rakshan Sharma</h2>
+      <p
+        style="color: var(--primary-cyan); font-weight: bold; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px; margin-bottom: 20px;">
+        Founder & Lead Developer</p>
+      <p style="color: var(--text-muted); font-size: 1.05rem; line-height: 1.6; max-width: 600px; margin: 0 auto;">Based
+        in Aligarh, UP, Rakshan created FF Arena to elevate the Indian mobile esports scene. What started as a small
+        project to host weekend scrims has evolved into the country's most advanced tournament ecosystem.</p>
+    </div>
+  </main>
+</body>
+
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Support - FF Arena</title>
+  <link rel="stylesheet" href="assets/css/app.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .contact-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 40px 0;
+    }
+
+    .contact-box {
+      width: 100%;
+      max-width: 600px;
+      text-align: center;
+    }
+
+    .contact-header i {
+      font-size: 3rem;
+      color: var(--primary-cyan);
+      margin-bottom: 20px;
+      filter: drop-shadow(0 0 10px var(--primary-glow));
+    }
+
+    /* HUD Style Form Inputs */
+    .hud-form {
+      margin-top: 40px;
+      text-align: left;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 30px;
+    }
+
+    .input-group input,
+    .input-group textarea {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-glass);
+      border-radius: 8px;
+      padding: 15px 20px;
+      color: var(--text-main);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .input-group textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .input-group label {
+      position: absolute;
+      left: 20px;
+      top: 15px;
+      color: var(--text-muted);
+      font-family: var(--font-heading);
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+
+    /* Glowing Focus State */
+    .input-group input:focus,
+    .input-group textarea:focus {
+      border-color: var(--primary-cyan);
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.15) inset, 0 0 15px var(--primary-glow);
+      background: rgba(0, 242, 254, 0.02);
+    }
+
+    /* Floating Label Logic */
+    .input-group input:focus~label,
+    .input-group input:valid~label,
+    .input-group textarea:focus~label,
+    .input-group textarea:valid~label {
+      top: -12px;
+      left: 15px;
+      font-size: 0.75rem;
+      color: var(--primary-cyan);
+      background: var(--bg-dark);
+      /* Masks the border behind it */
+      padding: 0 5px;
+    }
+
+    .submit-btn {
+      width: 100%;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container contact-wrapper">
+    <main class="glass-panel contact-box animate-fade-up">
+      <div class="contact-header">
+        <i class="fas fa-headset"></i>
+        <h1 class="text-gradient">Transmission Link</h1>
+        <p style="color: var(--text-muted); margin-top: 10px;">Need help with a tournament or payment? Drop us a signal
+          below.</p>
+      </div>
+
+      <form class="hud-form" onsubmit="event.preventDefault(); alert('Transmission Sent!');">
+
+        <div class="input-group animate-fade-up delay-1">
+          <input type="text" id="name" required>
+          <label>In-Game Name / UID</label>
+        </div>
+
+        <div class="input-group animate-fade-up delay-2">
+          <input type="email" id="email" required>
+          <label>Comms Channel (Email)</label>
+        </div>
+
+        <div class="input-group animate-fade-up delay-3">
+          <textarea id="message" required></textarea>
+          <label>Transmission Data (Message)</label>
+        </div>
+
+        <button type="submit" class="cyber-btn submit-btn animate-fade-up delay-3">
+          <i class="fas fa-paper-plane"></i> Initialize Link
+        </button>
+      </form>
+
+      <div style="margin-top: 30px; text-align: center;">
+        <a href="index.html"
+          style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: color 0.3s;"
+          onmouseover="this.style.color='var(--primary-cyan)'" onmouseout="this.style.color='var(--text-muted)'">Cancel
+          & Return to Lobby</a>
+      </div>
+    </main>
+  </div>
+
+</body>
+
+</html>

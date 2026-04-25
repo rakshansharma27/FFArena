@@ -1,0 +1,9 @@
+/*
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+
+/post.html
+  Cache-Control: public, max-age=3600
+
+/news.html
+  Cache-Control: public, max-age=3600

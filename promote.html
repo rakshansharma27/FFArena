@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advertise - FF Arena</title>
+    <link rel="stylesheet" href="assets/css/app.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: var(--bg-dark); min-height: 100vh; margin: 0; padding-top: 80px; }
+        .public-nav { position: fixed; top: 0; width: 100%; background: rgba(11, 12, 16, 0.9); backdrop-filter: blur(10px); padding: 15px 20px; z-index: 100; border-bottom: 1px solid var(--border-glass); display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: var(--font-heading); font-size: 1.5rem; color: #fff; text-decoration: none; }
+
+        .header { text-align: center; margin-bottom: 60px; }
+        .header h1 { font-size: 3rem; margin-bottom: 15px; }
+
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1000px; margin: 0 auto 60px; }
+        
+        .price-card { background: rgba(20, 22, 30, 0.6); border: 1px solid var(--border-glass); border-radius: 16px; padding: 40px 30px; text-align: center; transition: transform 0.3s; }
+        .price-card:hover { transform: translateY(-10px); border-color: var(--primary-cyan); }
+        .price-card.featured { border-color: #ffd700; background: linear-gradient(to bottom, rgba(255, 215, 0, 0.05), rgba(20, 22, 30, 0.8)); position: relative; }
+        .featured-tag { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: #ffd700; color: #000; font-weight: bold; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; }
+        
+        .price-icon { font-size: 3rem; color: var(--primary-cyan); margin-bottom: 20px; }
+        .price-card h3 { color: #fff; font-size: 1.5rem; margin-bottom: 10px; }
+        .price-amount { font-family: var(--font-heading); font-size: 2.5rem; color: #fff; margin-bottom: 20px; }
+        .price-amount span { font-size: 1rem; color: var(--text-muted); }
+        
+        .feature-list { list-style: none; padding: 0; margin-bottom: 30px; text-align: left; }
+        .feature-list li { color: var(--text-muted); margin-bottom: 12px; font-size: 0.95rem; }
+        .feature-list li i { color: #00ff88; margin-right: 10px; }
+    </style>
+</head>
+<body>
+    <nav class="public-nav">
+        <a href="index.html" class="logo">FF <span class="text-gradient">ARENA</span></a>
+    </nav>
+
+    <main class="container animate-fade-up">
+        <div class="header">
+            <h1 class="text-gradient">Reach the Core Audience</h1>
+            <p style="color: var(--text-muted); font-size: 1.1rem;">Advertise to thousands of active, highly engaged mobile gamers across India.</p>
+        </div>
+
+        <div class="pricing-grid">
+            <!-- Basic Tier -->
+            <div class="price-card delay-1">
+                <i class="fas fa-image price-icon"></i>
+                <h3>Banner Ads</h3>
+                <div class="price-amount">₹300 <span>/ week</span></div>
+                <ul class="feature-list">
+                    <li><i class="fas fa-check"></i> Homepage placement</li>
+                    <li><i class="fas fa-check"></i> Dashboard sidebar visibility</li>
+                    <li><i class="fas fa-check"></i> Direct link to your site/channel</li>
+                </ul>
+                <a href="contact.html" class="cyber-btn" style="width: 100%; justify-content: center; background: transparent;">Contact Us</a>
+            </div>
+
+            <!-- Premium Tier -->
+            <div class="price-card featured delay-2">
+                <div class="featured-tag">MOST POPULAR</div>
+                <i class="fas fa-trophy price-icon" style="color: #ffd700;"></i>
+                <h3>Sponsored Tournament</h3>
+                <div class="price-amount">₹1,500 <span>/ event</span></div>
+                <ul class="feature-list">
+                    <li><i class="fas fa-check"></i> "Title Sponsor" branding</li>
+                    <li><i class="fas fa-check"></i> Push notification to all users</li>
+                    <li><i class="fas fa-check"></i> Custom rule set & maps</li>
+                    <li><i class="fas fa-check"></i> Streamed on our channels</li>
+                </ul>
+                <a href="contact.html" class="cyber-btn" style="width: 100%; justify-content: center; border-color: #ffd700; color: #ffd700; background: rgba(255, 215, 0, 0.1);">Book Slot</a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
