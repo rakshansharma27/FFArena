@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In — FFArena</title>
+  <meta name="description" content="Sign in to FFArena with your Google account. Access tournaments, track your stats, and win prizes.">
+  <link rel="stylesheet" href="../assets/css/app.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background:
+        radial-gradient(ellipse at 30% 60%, rgba(0, 240, 255, 0.1), transparent 50%),
+        radial-gradient(ellipse at 70% 30%, rgba(124, 58, 237, 0.08), transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .login-container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 420px;
+      padding: 0 var(--space-md);
+    }
+
+    .login-card {
+      text-align: center;
+      padding: var(--space-2xl) var(--space-xl);
+    }
+
+    .login-logo {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: 4px;
+      margin-bottom: var(--space-xl);
+    }
+
+    .login-card h2 {
+      font-size: 1.6rem;
+      margin-bottom: var(--space-sm);
+    }
+
+    .login-card .subtitle {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      margin-bottom: var(--space-xl);
+    }
+
+    .google-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 16px 24px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-md);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s var(--ease-out);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .google-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+      transform: skewX(-20deg);
+      transition: all 0.6s ease;
+    }
+
+    .google-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .google-btn:hover::before {
+      left: 200%;
+    }
+
+    .google-btn img {
+      width: 22px;
+      height: 22px;
+    }
+
+    .login-divider {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      margin: var(--space-lg) 0;
+      color: var(--text-dim);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .login-divider::before,
+    .login-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-glass);
+    }
+
+    .login-perks {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      margin-top: var(--space-lg);
+    }
+
+    .login-perk {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-dim);
+      font-size: 0.82rem;
+    }
+
+    .login-perk i {
+      color: var(--accent-green);
+      font-size: 0.7rem;
+    }
+
+    .back-link {
+      display: block;
+      margin-top: var(--space-lg);
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      transition: color 0.3s;
+    }
+
+    .back-link:hover {
+      color: var(--primary-cyan);
+    }
+
+    /* Loading state */
+    .google-btn.loading {
+      pointer-events: none;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="login-container animate-scale">
+    <div class="glass-panel login-card">
+      <div class="login-logo">FF<span class="text-gradient">ARENA</span></div>
+      <h2>Welcome, <span class="text-gradient">Warrior</span></h2>
+      <p class="subtitle">Sign in to access tournaments, wallet & stats</p>
+
+      <button id="googleSignIn" class="google-btn">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+        Continue with Google
+      </button>
+
+      <div class="login-divider">What you get</div>
+
+      <div class="login-perks">
+        <div class="login-perk"><i class="fas fa-check"></i> Free account with instant wallet</div>
+        <div class="login-perk"><i class="fas fa-check"></i> Join unlimited tournaments</div>
+        <div class="login-perk"><i class="fas fa-check"></i> Real-time stats & leaderboard</div>
+        <div class="login-perk"><i class="fas fa-check"></i> Withdraw earnings via UPI</div>
+      </div>
+
+      <a href="../index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../assets/js/supabase.js"></script>
+  <script>
+    // If already logged in, redirect
+    (async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          window.location.href = 'user-dashboard.html';
+          return;
+        }
+      } catch (e) { }
+    })();
+
+    document.getElementById('googleSignIn').addEventListener('click', async () => {
+      const btn = document.getElementById('googleSignIn');
+      btn.classList.add('loading');
+      btn.innerHTML = '<div class="spinner"></div> Redirecting...';
+
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin + '/user/user-dashboard.html'
+        }
+      });
+      if (error) {
+        alert(error.message);
+        btn.classList.remove('loading');
+        btn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"> Continue with Google';
+      }
+    });
+  </script>
+</body>
+
+</html>

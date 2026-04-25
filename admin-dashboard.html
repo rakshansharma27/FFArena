@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Portal - FF Arena</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body style="background-color: var(--bg-dark); color: #fff; font-family: var(--font-main);">
+
+    <aside class="sidebar">
+        <a href="../index.html" class="sidebar-logo">FF ARENA</a>
+        <div class="owner-badge" style="background: rgba(0, 255, 136, 0.1); color: #00ff88; border-color: #00ff88;">
+            <i class="fas fa-shield-alt"></i> STAFF ADMIN
+        </div>
+        <nav class="nav-menu">
+            <a href="#" class="nav-item active"><i class="fas fa-tasks"></i> Control Center</a>
+            <a href="#" class="logout-btn nav-item" style="margin-top: auto; color: var(--text-muted);"><i
+                    class="fas fa-sign-out-alt"></i> Logout</a>
+        </nav>
+    </aside>
+
+    <main class="main-content animate-fade-up">
+        <h1 style="margin-bottom: 20px;">Staff Command Center</h1>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+
+            <!-- HOST TOURNAMENT PANEL -->
+            <div class="panel">
+                <h2 style="color: var(--primary-cyan);"><i class="fas fa-trophy"></i> Host a Tournament</h2>
+                <form id="host-tourney-form"
+                    style="display: flex; flex-direction: column; gap: 15px; margin-top: 15px;">
+                    <input type="text" id="t-title" placeholder="Tournament Title (e.g. Elite Scrims)" required
+                        style="padding: 10px; background: rgba(0,0,0,0.3); color: white; border: 1px solid var(--border-glass); border-radius: 5px;">
+
+                    <div style="display: flex; gap: 10px;">
+                        <input type="number" id="t-entry" placeholder="Entry Fee (₹)" required
+                            style="width: 50%; padding: 10px; background: rgba(0,0,0,0.3); color: white; border: 1px solid var(--border-glass); border-radius: 5px;">
+                        <input type="number" id="t-prize" placeholder="Prize Pool (₹)" required
+                            style="width: 50%; padding: 10px; background: rgba(0,0,0,0.3); color: white; border: 1px solid var(--border-glass); border-radius: 5px;">
+                    </div>
+
+                    <input type="datetime-local" id="t-time" required
+                        style="padding: 10px; background: rgba(0,0,0,0.3); color: white; border: 1px solid var(--border-glass); border-radius: 5px;">
+
+                    <button type="submit" class="cyber-btn" id="btn-create-tourney" style="justify-content: center;">
+                        <i class="fas fa-rocket"></i> Deploy Tournament
+                    </button>
+                </form>
+            </div>
+
+            <!-- POST NEWS PANEL -->
+            <div class="panel">
+                <h2 style="color: #aa00ff;"><i class="fas fa-bullhorn"></i> Post News / Announcement</h2>
+                <form id="post-news-form" style="display: flex; flex-direction: column; gap: 15px; margin-top: 15px;">
+                    <input type="text" id="n-title" placeholder="News Headline" required
+                        style="padding: 10px; background: rgba(0,0,0,0.3); color: white; border: 1px solid var(--border-glass); border-radius: 5px;">
+
+                    <textarea id="n-content" rows="4" placeholder="Write your announcement here..." required
+                        style="padding: 10px; background: rgba(0,0,0,0.3); color: white; border: 1px solid var(--border-glass); border-radius: 5px; resize: none;"></textarea>
+
+                    <button type="submit" class="cyber-btn" id="btn-post-news"
+                        style="justify-content: center; background: rgba(170,0,255,0.1); border-color: #aa00ff; color: #aa00ff;">
+                        <i class="fas fa-paper-plane"></i> Publish News
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </main>
+
+    <script type="module" src="../assets/js/admin.js"></script>
+</body>
+
+</html>

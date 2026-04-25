@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply to Host - FF Arena</title>
+    <link rel="stylesheet" href="../assets/css/app.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: var(--bg-dark);
+            min-height: 100vh;
+            margin: 0;
+            padding-top: 80px;
+        }
+
+        .public-nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(11, 12, 16, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 15px 20px;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-glass);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            max-width: 1100px;
+            margin: 0 auto 60px;
+            align-items: start;
+        }
+
+        .apply-form {
+            background: rgba(20, 22, 30, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-glass);
+            border-radius: 8px;
+            padding: 14px 16px;
+            color: #fff;
+            font-family: var(--font-body);
+            outline: none;
+        }
+
+        .input-group textarea {
+            resize: vertical;
+            min-height: 110px;
+        }
+
+        .muted {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="public-nav">
+        <a href="../index.html" class="logo">FF <span class="text-gradient">ARENA</span></a>
+        <a href="organizers.html" style="color: var(--text-muted); text-decoration:none;">
+            <i class="fas fa-arrow-left"></i> Directory
+        </a>
+    </nav>
+
+    <main class="container layout">
+        <div class="pitch animate-fade-up">
+            <div
+                style="color: var(--primary-cyan); font-family: var(--font-heading); letter-spacing: 2px; font-weight: bold; margin-bottom: 10px;">
+                PARTNER PROGRAM
+            </div>
+            <h1 style="font-size: 3rem; line-height: 1.1; margin-bottom: 12px;">Become an Official <span
+                    class="text-gradient">Organizer</span></h1>
+            <p class="muted" style="margin-bottom: 24px;">
+                Apply once. Owner will approve or reject. After approval you become <strong>ADMIN</strong> and can host
+                tournaments.
+            </p>
+
+            <div class="muted">
+                <div style="margin-bottom:10px;"><strong>Requirements</strong></div>
+                <ul style="padding-left:18px; margin:0;">
+                    <li>Valid email + social link</li>
+                    <li>Owner review required</li>
+                    <li>Platform fee will be calculated automatically</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="apply-form animate-fade-up delay-1">
+            <h2 style="font-family: var(--font-heading); color: #fff; margin-bottom: 10px; text-align: center;">
+                Submit Application
+            </h2>
+            <p class="muted" style="text-align:center; margin-bottom: 20px;" id="applyMsg">
+                Loading...
+            </p>
+
+            <form id="applyForm">
+                <div class="input-group">
+                    <input type="text" id="orgName" placeholder="Organization Name" required>
+                </div>
+
+                <div class="input-group">
+                    <input type="email" id="orgEmail" placeholder="Contact Email" required>
+                </div>
+
+                <div class="input-group">
+                    <select id="experienceLevel" required>
+                        <option value="" disabled selected>Select Prior Experience...</option>
+                        <option value="NEW">New Organizer (No experience)</option>
+                        <option value="SOME">Hosted a few WhatsApp/Discord scrims</option>
+                        <option value="PRO">Established Org (10+ tournaments hosted)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <input type="url" id="socialLink" placeholder="Main Social Link (YT/Discord/Insta)" required>
+                </div>
+
+                <div class="input-group">
+                    <textarea id="why" placeholder="Why do you want to host on FF Arena?" required></textarea>
+                </div>
+
+                <button type="submit" class="cyber-btn" id="submitBtn"
+                    style="width: 100%; justify-content: center; font-size: 1.05rem; padding: 14px;">
+                    <i class="fas fa-paper-plane"></i> Send Application
+                </button>
+
+                <p class="muted" style="text-align:center; margin-top: 14px;">
+                    Review usually within 24-48 hours.
+                </p>
+            </form>
+        </div>
+    </main>
+
+    <script type="module" src="./apply.js"></script>
+</body>
+
+</html>

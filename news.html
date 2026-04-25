@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intel & Updates - FF Arena News</title>
+    <link rel="stylesheet" href="../assets/css/app.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: var(--bg-dark);
+            min-height: 100vh;
+            margin: 0;
+            padding-top: 80px;
+        }
+
+        .public-nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(11, 12, 16, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 15px 20px;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-glass);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header-section h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        /* Categories Filter */
+        .category-filters {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .cat-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-glass);
+            color: var(--text-muted);
+            padding: 8px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: var(--font-heading);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .cat-btn:hover,
+        .cat-btn.active {
+            color: #fff;
+            border-color: var(--primary-cyan);
+            background: rgba(0, 242, 254, 0.1);
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        /* Featured Post */
+        .featured-post {
+            display: flex;
+            background: rgba(20, 22, 30, 0.6);
+            border: 1px solid var(--primary-cyan);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s;
+            text-decoration: none;
+        }
+
+        .featured-post:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 242, 254, 0.2);
+        }
+
+        .featured-img {
+            flex: 1;
+            min-height: 350px;
+            background: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&q=80') center/cover;
+        }
+
+        .featured-content {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .post-category {
+            display: inline-block;
+            background: rgba(0, 242, 254, 0.15);
+            color: var(--primary-cyan);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            width: fit-content;
+            border: 1px solid rgba(0, 242, 254, 0.3);
+        }
+
+        .cat-gear {
+            background: rgba(255, 153, 0, 0.15);
+            color: #ff9900;
+            border-color: rgba(255, 153, 0, 0.3);
+        }
+
+        .cat-patch {
+            background: rgba(170, 0, 255, 0.15);
+            color: #aa00ff;
+            border-color: rgba(170, 0, 255, 0.3);
+        }
+
+        .post-title {
+            font-size: 2rem;
+            color: #fff;
+            font-family: var(--font-heading);
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .post-excerpt {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .post-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: auto;
+        }
+
+        .post-meta img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+        }
+
+        /* News Grid */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .news-card {
+            background: rgba(20, 22, 30, 0.6);
+            border: 1px solid var(--border-glass);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s, border-color 0.3s;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .news-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-cyan);
+        }
+
+        .card-img {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            border-bottom: 1px solid var(--border-glass);
+        }
+
+        .card-content {
+            padding: 25px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-content .post-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .featured-post {
+                flex-direction: column;
+            }
+
+            .featured-img {
+                min-height: 250px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="public-nav">
+        <a href="../index.html" class="logo">FF <span class="text-gradient">ARENA</span></a>
+        <a href="../user/user-dashboard.html" class="cyber-btn"
+            style="padding: 8px 20px; font-size: 0.8rem;">Dashboard</a>
+    </nav>
+
+    <main class="container animate-fade-up">
+
+        <div class="header-section delay-1">
+            <h1 class="text-gradient">Arena Intel</h1>
+            <p style="color: var(--text-muted);">Latest esports news, patch updates, and gear reviews.</p>
+        </div>
+
+        <div class="category-filters animate-fade-up delay-2">
+            <button class="cat-btn active">All News</button>
+            <button class="cat-btn">Esports</button>
+            <button class="cat-btn">Patch Updates</button>
+            <button class="cat-btn">Gear Reviews</button>
+            <button class="cat-btn">Announcements</button>
+        </div>
+
+        <!-- Featured Article -->
+        <a href="post.html" class="featured-post animate-fade-up delay-3">
+            <div class="featured-img"
+                style="background-image: url('https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&q=80');">
+            </div>
+            <div class="featured-content">
+                <span class="post-category">Esports</span>
+                <h2 class="post-title">Team Phoenix Dominates Season 4 Championship Finals</h2>
+                <p class="post-excerpt">In an absolute masterclass of map rotation and aggressive pushes, Team Phoenix
+                    secured 3 Booyahs to take home the ₹10,000 grand prize. Watch the highlights and read our full
+                    breakdown of their strategy.</p>
+                <div class="post-meta">
+                    <img src="https://ui-avatars.com/api/?name=Admin&background=00f2fe&color=000">
+                    <span>By Rakshan_OP • April 11, 2026</span>
+                </div>
+            </div>
+        </a>
+
+        <!-- News Grid -->
+        <div class="news-grid animate-fade-up delay-3">
+
+            <!-- Post 1 (Gear Review) -->
+            <a href="post.html" class="news-card">
+                <div class="card-img"
+                    style="background-image: url('https://images.unsplash.com/photo-1599658880436-c61792e70672?auto=format&fit=crop&q=80');">
+                </div>
+                <div class="card-content">
+                    <span class="post-category cat-gear">Gear Review</span>
+                    <h2 class="post-title">Top 3 Gaming Earbuds for Free Fire Audio Cues</h2>
+                    <p class="post-excerpt">Hearing footsteps is the difference between a Booyah and returning to the
+                        lobby. We tested the best TWS earbuds under ₹2,000.</p>
+                    <div class="post-meta" style="margin-top: 15px;">
+                        <span>By Tech_Guru • April 09, 2026</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Post 2 (Patch Update) -->
+            <a href="post.html" class="news-card">
+                <div class="card-img"
+                    style="background-image: url('https://images.unsplash.com/photo-1616588589676-62b3bd4ff6d2?auto=format&fit=crop&q=80');">
+                </div>
+                <div class="card-content">
+                    <span class="post-category cat-patch">Patch Update</span>
+                    <h2 class="post-title">OB40 Update: Character Skill Rebalances Explained</h2>
+                    <p class="post-excerpt">Alok and Chrono receive massive adjustments in the latest patch. See how
+                        this affects the current competitive meta in FF Arena.</p>
+                    <div class="post-meta" style="margin-top: 15px;">
+                        <span>By FF_Analyst • April 05, 2026</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Post 3 (Announcement) -->
+            <a href="post.html" class="news-card">
+                <div class="card-img"
+                    style="background-image: url('https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&q=80');">
+                </div>
+                <div class="card-content">
+                    <span class="post-category"
+                        style="background: rgba(0, 255, 136, 0.15); color: #00ff88; border-color: rgba(0, 255, 136, 0.3);">Announcement</span>
+                    <h2 class="post-title">New Feature: Instant Wallet Top-Ups are Live!</h2>
+                    <p class="post-excerpt">No more waiting for manual UPI verifications. You can now deposit funds
+                        directly into your Arena Wallet for 1-click tournament registrations.</p>
+                    <div class="post-meta" style="margin-top: 15px;">
+                        <span>By Rakshan_OP • April 01, 2026</span>
+                    </div>
+                </div>
+            </a>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>

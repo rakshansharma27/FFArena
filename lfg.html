@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Players (LFG) - FF Arena</title>
+    <link rel="stylesheet" href="../assets/css/app.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            display: flex;
+            background-color: var(--bg-dark);
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* --- Sidebar (Same as Dashboard) --- */
+        .sidebar {
+            width: 280px;
+            background: rgba(11, 12, 16, 0.9);
+            border-right: 1px solid var(--border-glass);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            backdrop-filter: blur(15px);
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            color: #fff;
+            text-decoration: none;
+            text-align: center;
+            margin-bottom: 40px;
+            letter-spacing: 2px;
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: rgba(0, 242, 254, 0.1);
+            color: var(--primary-cyan);
+            box-shadow: inset 4px 0 0 var(--primary-cyan);
+        }
+
+        /* --- Main Content --- */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 40px;
+            max-width: 1400px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            color: #fff;
+        }
+
+        /* --- Filters --- */
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-glass);
+            color: var(--text-muted);
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            color: #fff;
+            border-color: var(--primary-cyan);
+            background: rgba(0, 242, 254, 0.1);
+        }
+
+        /* --- Role Colors --- */
+        .role-rusher {
+            color: #ff4757;
+            background: rgba(255, 71, 87, 0.1);
+            border: 1px solid rgba(255, 71, 87, 0.3);
+        }
+
+        .role-sniper {
+            color: #aa00ff;
+            background: rgba(170, 0, 255, 0.1);
+            border: 1px solid rgba(170, 0, 255, 0.3);
+        }
+
+        .role-igl {
+            color: #00f2fe;
+            background: rgba(0, 242, 254, 0.1);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+        }
+
+        .role-support {
+            color: #00ff88;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        /* --- LFG Grid --- */
+        .lfg-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .player-card {
+            background: rgba(20, 22, 30, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-glass);
+            border-radius: 12px;
+            padding: 25px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .player-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Top Section: Avatar & Info */
+        .card-top {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .player-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .player-info h3 {
+            font-size: 1.2rem;
+            color: #fff;
+            margin-bottom: 4px;
+            text-transform: none;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        /* Middle Section: Stats & Note */
+        .player-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .stat-highlight {
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .player-note {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-style: italic;
+            margin-bottom: 20px;
+            border-left: 3px solid var(--primary-cyan);
+        }
+
+        /* Modal specific */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            width: 100%;
+            max-width: 500px;
+            transform: translateY(20px);
+            transition: transform 0.3s;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .close-modal {
+            float: right;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .form-group select,
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-glass);
+            padding: 12px;
+            color: #fff;
+            border-radius: 6px;
+            outline: none;
+            font-family: var(--font-body);
+        }
+
+        .form-group select:focus,
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary-cyan);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <a href="../index.html" class="sidebar-logo">FF <span class="text-gradient">ARENA</span></a>
+        <nav class="nav-menu">
+            <a href="user-dashboard.html" class="nav-item"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a href="my-tournaments.html" class="nav-item"><i class="fas fa-trophy"></i> My Tournaments</a>
+            <a href="team.html" class="nav-item"><i class="fas fa-users"></i> My Squad</a>
+            <a href="lfg.html" class="nav-item active"><i class="fas fa-search"></i> Find Players</a>
+            <a href="settings.html" class="nav-item"><i class="fas fa-cog"></i> Settings</a>
+            <a href="../index.html" class="nav-item logout-btn" style="margin-top: auto;"><i
+                    class="fas fa-sign-out-alt"></i> Disconnect</a>
+        </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <div class="page-header animate-fade-up">
+            <div>
+                <h1>Looking For <span class="text-gradient">Group</span></h1>
+                <p style="color: var(--text-muted); margin-top: 5px;">Recruit free agents or find a squad to join.</p>
+            </div>
+            <button class="cyber-btn" onclick="openModal()"><i class="fas fa-bullhorn"></i> Post Request</button>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters animate-fade-up delay-1">
+            <button class="filter-btn active">All Roles</button>
+            <button class="filter-btn">Rusher</button>
+            <button class="filter-btn">Sniper</button>
+            <button class="filter-btn">IGL</button>
+            <button class="filter-btn">Support</button>
+        </div>
+
+        <!-- Player Grid -->
+        <div class="lfg-grid animate-fade-up delay-2">
+
+            <!-- Card 1: Rusher -->
+            <div class="player-card">
+                <div class="card-top">
+                    <img src="https://ui-avatars.com/api/?name=Viper&background=ff4757&color=fff" class="player-avatar">
+                    <div class="player-info">
+                        <h3>Viper_X</h3>
+                        <span class="role-badge role-rusher"><i class="fas fa-bolt"></i> Rusher</span>
+                    </div>
+                </div>
+                <div class="player-stats">
+                    <span>Rank: <span class="stat-highlight" style="color: #ff4757;">Heroic</span></span>
+                    <span>K/D: <span class="stat-highlight">4.8</span></span>
+                </div>
+                <div class="player-note">"Aggressive entry fragger. Looking for a T2/T1 squad for evening scrims. Active
+                    daily."</div>
+                <button class="cyber-btn"
+                    style="width: 100%; justify-content: center; padding: 10px; font-size: 0.85rem;"><i
+                        class="fas fa-paper-plane"></i> Send Invite</button>
+            </div>
+
+            <!-- Card 2: IGL -->
+            <div class="player-card">
+                <div class="card-top">
+                    <img src="https://ui-avatars.com/api/?name=Ghost&background=00f2fe&color=000" class="player-avatar">
+                    <div class="player-info">
+                        <h3>Ghost.IGL</h3>
+                        <span class="role-badge role-igl"><i class="fas fa-brain"></i> IGL</span>
+                    </div>
+                </div>
+                <div class="player-stats">
+                    <span>Rank: <span class="stat-highlight" style="color: #00f2fe;">Grandmaster</span></span>
+                    <span>Win Rate: <span class="stat-highlight">42%</span></span>
+                </div>
+                <div class="player-note" style="border-color: #00f2fe;">"Experienced IGL with great map rotation
+                    knowledge. Need a disciplined squad that listens to calls."</div>
+                <button class="cyber-btn"
+                    style="width: 100%; justify-content: center; padding: 10px; font-size: 0.85rem;"><i
+                        class="fas fa-paper-plane"></i> Send Invite</button>
+            </div>
+
+            <!-- Card 3: Sniper -->
+            <div class="player-card">
+                <div class="card-top">
+                    <img src="https://ui-avatars.com/api/?name=Deadshot&background=aa00ff&color=fff"
+                        class="player-avatar">
+                    <div class="player-info">
+                        <h3>Deadshot</h3>
+                        <span class="role-badge role-sniper"><i class="fas fa-crosshairs"></i> Sniper</span>
+                    </div>
+                </div>
+                <div class="player-stats">
+                    <span>Rank: <span class="stat-highlight" style="color: #aa00ff;">Master</span></span>
+                    <span>Headshot: <span class="stat-highlight">68%</span></span>
+                </div>
+                <div class="player-note" style="border-color: #aa00ff;">"Double AWM specialist. Need a squad that can
+                    hold the frontline while I cover. Available weekends."</div>
+                <button class="cyber-btn"
+                    style="width: 100%; justify-content: center; padding: 10px; font-size: 0.85rem;"><i
+                        class="fas fa-paper-plane"></i> Send Invite</button>
+            </div>
+
+            <!-- Card 4: Support -->
+            <div class="player-card">
+                <div class="card-top">
+                    <img src="https://ui-avatars.com/api/?name=Medic&background=00ff88&color=000" class="player-avatar">
+                    <div class="player-info">
+                        <h3>Medic_Bro</h3>
+                        <span class="role-badge role-support"><i class="fas fa-shield-alt"></i> Support</span>
+                    </div>
+                </div>
+                <div class="player-stats">
+                    <span>Rank: <span class="stat-highlight" style="color: #00ff88;">Heroic</span></span>
+                    <span>Revives: <span class="stat-highlight">1,204</span></span>
+                </div>
+                <div class="player-note" style="border-color: #00ff88;">"Utility player. I carry gloo walls, medkits,
+                    and cover flanks. Looking for an aggressive duo/squad."</div>
+                <button class="cyber-btn"
+                    style="width: 100%; justify-content: center; padding: 10px; font-size: 0.85rem;"><i
+                        class="fas fa-paper-plane"></i> Send Invite</button>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Create Post Modal -->
+    <div class="modal-overlay" id="postModal">
+        <div class="glass-panel modal-content">
+            <i class="fas fa-times close-modal" onclick="closeModal()"></i>
+            <h2 class="text-gradient" style="margin-bottom: 20px;">Broadcast Request</h2>
+
+            <form onsubmit="event.preventDefault(); closeModal(); alert('LFG Post Published!');">
+                <div class="form-group">
+                    <label>Primary Role</label>
+                    <select required>
+                        <option value="rusher">Rusher (Entry Fragger)</option>
+                        <option value="sniper">Sniper (Long Range)</option>
+                        <option value="igl">IGL (In-Game Leader)</option>
+                        <option value="support">Support (Utility/Medic)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Current Rank</label>
+                    <select required>
+                        <option value="diamond">Diamond</option>
+                        <option value="heroic" selected>Heroic</option>
+                        <option value="master">Master</option>
+                        <option value="grandmaster">Grandmaster</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Availability / Schedule</label>
+                    <input type="text" placeholder="e.g. Evenings after 6 PM, Weekends" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Brief Note to Squads</label>
+                    <textarea rows="3"
+                        placeholder="Describe your playstyle and what kind of squad you are looking for..."
+                        required></textarea>
+                </div>
+
+                <button type="submit" class="cyber-btn" style="width: 100%; justify-content: center;">
+                    <i class="fas fa-broadcast-tower"></i> Publish Post
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script for Modal and Filters -->
+    <script>
+        const modal = document.getElementById('postModal');
+        function openModal() { modal.classList.add('active'); }
+        function closeModal() { modal.classList.remove('active'); }
+        window.onclick = function (event) { if (event.target == modal) closeModal(); }
+
+        // Filter Button Logic
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                // In a real app, this would filter the Supabase data
+            });
+        });
+    </script>
+</body>
+
+</html>

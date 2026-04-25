@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Login | FF Arena</title>
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="theme-color" content="#00F0FF" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="/assets/css/app.css" />
+
+    <style>
+        :root {
+            --ff-orange: #FF6B00;
+            --ff-cyan: #00F0FF;
+            --ff-green: #39FF14;
+            --bg-darkest: #020408;
+            --bg-dark: #050810;
+            --bg-card: rgba(12, 20, 34, 0.95);
+            --text-primary: #FFFFFF;
+            --text-secondary: #A0B1C8;
+            --text-muted: #6B7A8F;
+            --grad-cyan: linear-gradient(135deg, #00F0FF 0%, #0088FF 100%);
+            --glow-cyan: 0 0 30px rgba(0, 240, 255, 0.3);
+            --font-display: 'Orbitron', sans-serif;
+            --font-heading: 'Rajdhani', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 20px;
+            background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0, 240, 255, 0.12) 0%, transparent 55%),
+                radial-gradient(ellipse 60% 40% at 80% 90%, rgba(255, 107, 0, 0.06) 0%, transparent 55%),
+                linear-gradient(180deg, var(--bg-darkest), var(--bg-dark));
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            position: relative
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: linear-gradient(rgba(0, 240, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 240, 255, 0.04) 1px, transparent 1px);
+            background-size: 48px 48px;
+            pointer-events: none;
+            z-index: 0
+        }
+
+        .card {
+            width: min(440px, 96vw);
+            background: var(--bg-card);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            border-radius: 24px;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.7), var(--glow-cyan);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(24px)
+        }
+
+        .card::before {
+            content: '';
+            display: block;
+            height: 3px;
+            background: var(--grad-cyan)
+        }
+
+        .card-head {
+            padding: 28px 28px 24px;
+            text-align: center;
+            border-bottom: 1px solid rgba(0, 240, 255, 0.1)
+        }
+
+        .logo-link {
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--grad-cyan);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: var(--glow-cyan)
+        }
+
+        .logo-txt {
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--ff-orange);
+            letter-spacing: 2px
+        }
+
+        .logo-txt span {
+            color: var(--ff-cyan);
+            font-weight: 400
+        }
+
+        .admin-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 240, 255, 0.08);
+            border: 1px solid rgba(0, 240, 255, 0.25);
+            color: var(--ff-cyan);
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase
+        }
+
+        .card-body {
+            padding: 28px
+        }
+
+        .form-group {
+            margin-bottom: 18px
+        }
+
+        .form-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 8px
+        }
+
+        .input-wrap {
+            position: relative;
+            display: flex;
+            align-items: center
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 14px;
+            color: var(--text-muted);
+            font-size: 14px;
+            pointer-events: none;
+            transition: color 0.2s
+        }
+
+        .input-wrap:focus-within .input-icon {
+            color: var(--ff-cyan)
+        }
+
+        .input-wrap input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 240, 255, 0.15);
+            color: var(--text-primary);
+            border-radius: 12px;
+            padding: 13px 44px 13px 42px;
+            font-family: var(--font-body);
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s
+        }
+
+        .input-wrap input:focus {
+            border-color: var(--ff-cyan);
+            box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.12)
+        }
+
+        .toggle-pw {
+            position: absolute;
+            right: 14px;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 14px;
+            transition: color 0.2s;
+            z-index: 2
+        }
+
+        .toggle-pw:hover {
+            color: var(--ff-cyan)
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--grad-cyan);
+            color: #001018;
+            border: none;
+            border-radius: 12px;
+            font-family: var(--font-heading);
+            font-size: 16px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: var(--glow-cyan);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 6px
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 50px rgba(0, 240, 255, 0.4)
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none
+        }
+
+        .msg {
+            margin-top: 14px;
+            padding: 13px 16px;
+            border-radius: 12px;
+            font-size: 13px;
+            line-height: 1.5;
+            display: none;
+            text-align: center
+        }
+
+        .msg.ok {
+            color: var(--ff-green);
+            border: 1px solid rgba(57, 255, 20, 0.25);
+            background: rgba(57, 255, 20, 0.08)
+        }
+
+        .msg.err {
+            color: #ffc4c4;
+            border: 1px solid rgba(255, 26, 26, 0.25);
+            background: rgba(255, 26, 26, 0.08)
+        }
+
+        .help-text {
+            margin-top: 16px;
+            padding: 12px;
+            background: rgba(0, 240, 255, 0.05);
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            border-radius: 10px;
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-family: var(--font-mono)
+        }
+
+        .help-text strong {
+            color: var(--ff-cyan)
+        }
+
+        .card-foot {
+            padding: 16px 28px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            text-align: center
+        }
+
+        .back-link-foot {
+            color: var(--text-muted);
+            font-size: 12px;
+            text-decoration: none;
+            font-family: var(--font-mono);
+            transition: color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px
+        }
+
+        .back-link-foot:hover {
+            color: var(--ff-cyan)
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+    <div class="card">
+        <div class="card-head">
+            <a href="/index.html" class="logo-link">
+                <div class="logo-icon"><i class="fas fa-shield-alt"></i></div>
+                <div class="logo-txt">FF<span>ARENA</span></div>
+            </a>
+            <div class="admin-badge"><i class="fas fa-lock"></i> Admin / Owner Access</div>
+        </div>
+
+        <div class="card-body">
+            <div class="form-group">
+                <label class="form-label"><i class="fas fa-envelope"></i> Email</label>
+                <div class="input-wrap">
+                    <i class="fas fa-envelope input-icon"></i>
+                    <input id="adminEmail" type="email" placeholder="email@example.com" autocomplete="email" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label"><i class="fas fa-lock"></i> Password</label>
+                <div class="input-wrap">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input id="adminPassword" type="password" placeholder="Password" autocomplete="current-password" />
+                    <i class="fas fa-eye toggle-pw" onclick="togglePw()"></i>
+                </div>
+            </div>
+
+            <button class="submit-btn" id="loginBtn" onclick="doAdminLogin()">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </button>
+
+            <div class="msg" id="loginMsg"></div>
+
+            <div class="help-text">
+                <strong>Note:</strong> Access is based on <strong>profiles.role</strong>:
+                <strong>OWNER</strong> or <strong>ADMIN</strong>.
+            </div>
+        </div>
+
+        <div class="card-foot">
+            <a href="/index.html" class="back-link-foot"><i class="fas fa-arrow-left"></i> Back to FF Arena</a>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://fjjmlmxxbdacqmzntkvb.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZqam1sbXh4YmRhY3Ftem50a3ZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM3MzA5MzksImV4cCI6MjA4OTMwNjkzOX0.dLMbrDMbruDyzEbmnFhHIYJqt3OLwwjEz36SAbF93uI';
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        function showMsg(text, type) {
+            const el = document.getElementById('loginMsg');
+            el.textContent = text;
+            el.className = 'msg ' + type;
+            el.style.display = 'block';
+        }
+
+        function togglePw() {
+            const inp = document.getElementById('adminPassword');
+            const icon = document.querySelector('.toggle-pw');
+            const isHidden = inp.type === 'password';
+            inp.type = isHidden ? 'text' : 'password';
+            icon.classList.toggle('fa-eye', !isHidden);
+            icon.classList.toggle('fa-eye-slash', isHidden);
+        }
+
+        async function redirectByRole(userId) {
+            // IMPORTANT: this requires profiles RLS to allow reading your own profile row
+            const { data: prof, error } = await sb
+                .from('profiles')
+                .select('role')
+                .eq('id', userId)
+                .maybeSingle();
+
+            if (error) {
+                console.error(error);
+                showMsg('Profile read blocked (RLS). Fix profiles SELECT policy for own row.', 'err');
+                await sb.auth.signOut();
+                return;
+            }
+
+            if (!prof) {
+                showMsg('Profile not found. Wait 5-10 seconds (trigger) and try again.', 'err');
+                await sb.auth.signOut();
+                return;
+            }
+
+            if (prof.role === 'OWNER') {
+                window.location.href = '/admin/owner-dashboard.html';
+                return;
+            }
+
+            if (prof.role === 'ADMIN') {
+                window.location.href = '/admin/ff-admin-dashboard.html';
+                return;
+            }
+
+            showMsg('❌ NOT AUTHORIZED — Your role is not ADMIN/OWNER.', 'err');
+            await sb.auth.signOut();
+        }
+
+        // auto redirect if already logged in
+        sb.auth.getSession().then(async ({ data: { session } }) => {
+            if (!session?.user) return;
+            await redirectByRole(session.user.id);
+        });
+
+        async function doAdminLogin() {
+            const email = document.getElementById('adminEmail').value.trim();
+            const password = document.getElementById('adminPassword').value;
+            const btn = document.getElementById('loginBtn');
+
+            if (!email || !password) { showMsg('Please fill all fields.', 'err'); return; }
+
+            btn.disabled = true;
+            const old = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
+
+            const { data, error } = await sb.auth.signInWithPassword({ email, password });
+
+            if (error) {
+                btn.disabled = false;
+                btn.innerHTML = old;
+                showMsg(error.message || 'Login failed.', 'err');
+                return;
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = old;
+
+            showMsg('✅ Logged in. Checking clearance...', 'ok');
+            await redirectByRole(data.user.id);
+        }
+
+        document.addEventListener('keydown', e => { if (e.key === 'Enter') doAdminLogin(); });
+    </script>
+</body>
+
+</html>

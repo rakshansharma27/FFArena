@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Tournaments - FFArena</title>
+    <link rel="stylesheet" href="../assets/css/app.css">
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            background: #0a0a0a;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: rgba(11, 12, 16, 0.95);
+            border-right: 1px solid #2a3a5e;
+            padding: 30px 20px;
+            position: fixed;
+            height: 100vh;
+        }
+
+        .sidebar-logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            color: #fff;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: #8a9bb5;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 5px;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: rgba(0, 242, 254, 0.1);
+            color: #00F0FF;
+        }
+
+        .logout-btn {
+            color: #ff4757;
+            margin-top: auto;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 30px;
+        }
+
+        .match-card {
+            background: rgba(20, 22, 30, 0.6);
+            border: 1px solid #2a3a5e;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .room-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px dashed #00F0FF;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .hidden-room {
+            color: #8a9bb5;
+        }
+
+        button {
+            background: #e94560;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-logo">FF<span style="color:#00F0FF;">ARENA</span></div>
+        <nav>
+            <a href="user-dashboard.html" class="nav-item">🏠 Dashboard</a>
+            <a href="my-tournaments.html" class="nav-item active">🏆 My Tournaments</a>
+            <a href="settings.html" class="nav-item">⚙️ Settings</a>
+            <a href="#" class="nav-item logout-btn" onclick="signOut()">🚪 Logout</a>
+        </nav>
+    </aside>
+    <main class="main-content">
+        <h2 style="color:#fff; margin-bottom:30px;">My <span style="color:#00F0FF;">Tournaments</span></h2>
+        <div class="match-list" id="matchList">Loading...</div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../assets/js/supabase.js"></script>
+    <script>
+        (async () => {
+            const session = await getSession();
+            if (!session) return;
+            const userId = session.user.id;
+
+            const { data: participations, error } = await supabase
+                .from('tournament_participants')
+                .select('tournament_id, tournaments!inner(title, mode, start_time, status, room_id, room_password, check_in_start_time)')
+                .eq('user_id', userId);
+
+            const list = document.getElementById('matchList');
+            if (error) { list.innerHTML = 'Error loading tournaments.'; return; }
+            if (!participations || participations.length === 0) {
+                list.innerHTML = '<p>You haven\'t joined any tournaments yet.</p>';
+                return;
+            }
+
+            list.innerHTML = participations.map(p => {
+                const t = p.tournaments;
+                const isLive = t.status === 'LIVE' || (t.status === 'UPCOMING' && t.check_in_start_time && new Date(t.check_in_start_time) < new Date());
+                const showRoom = isLive && t.room_id;
+                return `
+          <div class="match-card" style="border-left: 4px solid ${isLive ? '#ff0055' : '#00F0FF'}">
+            <div>
+              <span style="background: ${isLive ? '#ff0055' : '#00F0FF'}; color:#000; padding:3px 8px; border-radius:4px; font-size:0.8rem;">${t.status}</span>
+              <h3>${t.title} (${t.mode})</h3>
+              <p>${new Date(t.start_time).toLocaleString()}</p>
+              ${showRoom ? `
+              <div class="room-box">
+                <div>Room ID: ${t.room_id} <button onclick="navigator.clipboard.writeText('${t.room_id}')">Copy</button></div>
+                <div>PW: ${t.room_password} <button onclick="navigator.clipboard.writeText('${t.room_password}')">Copy</button></div>
+              </div>
+              ` : '<div class="room-box hidden-room"><i class="fas fa-lock"></i> Room details unlock before start.</div>'}
+            </div>
+            <div style="text-align:right;">
+              <button onclick="submitResult('${p.tournament_id}')">Submit Result</button>
+            </div>
+          </div>
+        `;
+            }).join('');
+        })();
+
+        window.submitResult = async (tournamentId) => {
+            const kills = prompt('Kills:');
+            const placement = prompt('Placement (1-100):');
+            if (!kills || !placement) return;
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+            fileInput.onchange = async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const fileName = `${tournamentId}/${Date.now()}.png`;
+                const { error: uploadError } = await supabase.storage.from('screenshots').upload(fileName, file);
+                if (uploadError) { alert(uploadError.message); return; }
+                const { data: { publicUrl } } = supabase.storage.from('screenshots').getPublicUrl(fileName);
+                const session = await getSession();
+                const { error } = await supabase.from('tournament_participants')
+                    .update({ kills, points: placement, screenshot_url: publicUrl })
+                    .eq('tournament_id', tournamentId)
+                    .eq('user_id', session.user.id);
+                if (error) alert(error.message);
+                else alert('Result submitted!');
+            };
+            fileInput.click();
+        };
+    </script>
+</body>
+
+</html>

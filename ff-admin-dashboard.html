@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tactical Command | FF Arena</title>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <style>
+    :root {
+      --bg-deep: #050810;
+      --bg-card: rgba(12, 20, 34, 0.6);
+      --accent-cyan: #00F0FF;
+      --accent-red: #FF4757;
+      --text-main: #FFFFFF;
+      --text-muted: #6B7A8F;
+      --border-glass: rgba(0, 240, 255, 0.1);
+      --font-display: 'Bebas Neue', cursive;
+      --font-body: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      transition: all 0.2s ease;
+    }
+
+    body {
+      background-color: var(--bg-deep);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      margin: 0;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 280px;
+      background: rgba(2, 4, 8, 0.95);
+      backdrop-filter: blur(20px);
+      border-right: 1px solid var(--border-glass);
+      padding: 40px 20px;
+      position: fixed;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+    }
+
+    .sidebar-logo {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      color: var(--text-main);
+      text-decoration: none;
+      letter-spacing: 2px;
+      margin-bottom: 14px;
+    }
+
+    .role-badge {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent-cyan);
+      opacity: 0.9;
+      margin-bottom: 30px;
+    }
+
+    .nav-item {
+      padding: 16px 20px;
+      border-radius: 12px;
+      color: var(--text-muted);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 8px;
+      user-select: none;
+    }
+
+    .nav-item.active {
+      background: rgba(0, 240, 255, 0.05);
+      color: var(--accent-cyan);
+      border: 1px solid var(--border-glass);
+    }
+
+    .main-content {
+      flex: 1;
+      margin-left: 280px;
+      padding: 60px;
+      max-width: 1300px;
+      width: 100%;
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: 3.5rem;
+      margin-bottom: 30px;
+      letter-spacing: 1px;
+    }
+
+    .glass-panel {
+      background: var(--bg-card);
+      backdrop-filter: blur(15px);
+      border: 1px solid var(--border-glass);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .glass-panel::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--accent-cyan);
+    }
+
+    .panel-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+      color: var(--accent-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: -6px;
+      margin-bottom: 14px;
+      line-height: 1.4;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 10px;
+    }
+
+    th {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-align: left;
+      padding: 0 15px;
+    }
+
+    td {
+      background: rgba(255, 255, 255, 0.02);
+      padding: 18px 15px;
+      font-weight: 500;
+    }
+
+    td:first-child {
+      border-radius: 12px 0 0 12px;
+      border-left: 1px solid var(--border-glass);
+    }
+
+    td:last-child {
+      border-radius: 0 12px 12px 0;
+      border-right: 1px solid var(--border-glass);
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    input,
+    select,
+    textarea {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-glass);
+      padding: 12px;
+      border-radius: 8px;
+      color: #fff;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--accent-cyan);
+    }
+
+    .btn-primary {
+      background: var(--accent-cyan);
+      color: var(--bg-deep);
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .btn-danger {
+      background: var(--accent-red);
+      color: #fff;
+    }
+
+    .btn-purple {
+      background: #aa00ff;
+      color: #fff;
+    }
+
+    .admin-section {
+      display: none;
+    }
+
+    .admin-section.active {
+      display: block;
+      animation: fadeIn 0.35s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .stat {
+      border: 1px solid var(--border-glass);
+      border-radius: 16px;
+      padding: 16px;
+      background: rgba(0, 0, 0, 0.18);
+    }
+
+    .stat .k {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .stat .v {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      margin-top: 6px;
+    }
+
+    .muted {
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    .mono {
+      font-family: var(--font-mono);
+    }
+  </style>
+</head>
+
+<body>
+  <aside class="sidebar">
+    <a href="#" class="sidebar-logo">FF ARENA</a>
+    <div class="role-badge" id="admin-role-badge">ROLE: ...</div>
+
+    <nav>
+      <div class="nav-item active" onclick="switchTab(event, 'tab-dashboard')"><i class="fas fa-terminal"></i> Command
+        Center</div>
+      <div class="nav-item" onclick="switchTab(event, 'tab-matches')"><i class="fas fa-crosshairs"></i> Match Ledger
+      </div>
+      <div class="nav-item" onclick="switchTab(event, 'tab-payouts')"><i class="fas fa-wallet"></i> Payout Requests
+      </div>
+      <div class="nav-item" onclick="switchTab(event, 'tab-utr')"><i class="fas fa-receipt"></i> UTR Join Requests</div>
+      <div class="nav-item" onclick="switchTab(event, 'tab-sponsor')"><i class="fas fa-star"></i> Sponsorship</div>
+
+      <div class="logout-btn nav-item" style="margin-top:auto; color: var(--accent-red);">
+        <i class="fas fa-power-off"></i> Disconnect
+      </div>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <!-- TAB: DASHBOARD -->
+    <section id="tab-dashboard" class="admin-section active">
+      <h1>Staff Overview</h1>
+
+      <!-- Organizer Stats + Settlement -->
+      <div class="glass-panel">
+        <div class="panel-title"><i class="fas fa-chart-line"></i> Organizer Stats & Settlement</div>
+        <div class="hint">
+          Platform fee is calculated automatically per registration. Pay Owner via UPI:
+          <strong class="mono" id="owner-upi">9415515687@upi</strong>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat">
+            <div class="k">Tournaments Hosted</div>
+            <div class="v" id="org-stat-hosted">0</div>
+          </div>
+          <div class="stat">
+            <div class="k">Registrations (Participants)</div>
+            <div class="v" id="org-stat-registrations">0</div>
+          </div>
+          <div class="stat">
+            <div class="k">Prizes Distributed</div>
+            <div class="v" id="org-stat-prizes">₹0</div>
+          </div>
+          <div class="stat">
+            <div class="k">Platform Fees Owed (Unsettled)</div>
+            <div class="v" id="org-stat-fees">₹0</div>
+          </div>
+        </div>
+
+        <div class="muted">
+          Note: Settlement marking (Paid to Owner) can be added next (button + owner approval).
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+        <!-- Host Tournament -->
+        <div class="glass-panel">
+          <div class="panel-title"><i class="fas fa-plus"></i> Host New Tournament</div>
+          <div class="hint">Host as Admin/Organizer. Add UPI/QR for manual payment too (optional).</div>
+
+          <form id="host-tourney-form">
+            <div class="input-group"><label>Title</label><input type="text" id="t-title" required /></div>
+            <div style="display:flex; gap:15px">
+              <div class="input-group" style="flex:1"><label>Entry Fee</label><input type="number" id="t-entry"
+                  required /></div>
+              <div class="input-group" style="flex:1"><label>Prize Pool</label><input type="number" id="t-prize"
+                  required /></div>
+            </div>
+            <div class="input-group"><label>Start Time</label><input type="datetime-local" id="t-time" required /></div>
+
+            <div style="display:flex; gap:15px">
+              <div class="input-group" style="flex:1"><label>Payment UPI ID (Optional)</label><input type="text"
+                  id="t-upi" placeholder="example@upi" /></div>
+              <div class="input-group" style="flex:1"><label>Payment QR URL (Optional)</label><input type="url"
+                  id="t-qr" placeholder="https://..." /></div>
+            </div>
+
+            <button type="submit" class="btn-primary" id="btn-create-tourney">Initialize Operation</button>
+            <div class="muted" id="create-tourney-fee-preview"></div>
+          </form>
+        </div>
+
+        <!-- Manual Match Resolver -->
+        <div class="glass-panel" style="border-left-color: #aa00ff;">
+          <div class="panel-title" style="color: #aa00ff;"><i class="fas fa-user-edit"></i> Manual Match Resolver</div>
+          <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 20px;">
+            Select a tournament in Match Ledger, then award prize to winner.
+          </p>
+          <div class="input-group">
+            <label>Winner Player/Leader Email</label>
+            <input type="email" id="winner-email-manual" placeholder="player@example.com" />
+          </div>
+          <div class="input-group">
+            <label>Total Team Kills (Optional)</label>
+            <input type="number" id="winner-kills-manual" placeholder="0" />
+          </div>
+          <button class="btn-primary btn-purple" onclick="resolveManually()"><i class="fas fa-check-double"></i> Confirm
+            Results</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB: PAYOUTS -->
+    <section id="tab-payouts" class="admin-section">
+      <div class="glass-panel">
+        <div class="panel-title"><i class="fas fa-money-bill-wave"></i> Pending Withdrawals</div>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 20px;">
+          Manually send funds to the player's UPI, then click "Paid". Reject refunds to wallet automatically.
+        </p>
+        <table>
+          <thead>
+            <tr>
+              <th>Player (Email)</th>
+              <th>UPI ID</th>
+              <th>Amount</th>
+              <th>Command</th>
+            </tr>
+          </thead>
+          <tbody id="admin-payouts-body">
+            <tr>
+              <td colspan="4" style="text-align:center;"><i class="fas fa-spinner fa-spin"></i> Loading...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB: MATCHES -->
+    <section id="tab-matches" class="admin-section">
+      <div class="glass-panel">
+        <div class="panel-title"><i class="fas fa-door-open"></i> Room ID & Password Manager</div>
+        <div class="hint">
+          Step 1: Select tournament from ledger. Step 2: Enter Room ID/Password. Step 3: Save. Step 4: Start match.
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+          <div class="input-group">
+            <label>Room ID</label>
+            <input type="text" id="room-id" placeholder="e.g. 123456" />
+          </div>
+          <div class="input-group">
+            <label>Room Password</label>
+            <input type="text" id="room-password" placeholder="e.g. 9876" />
+          </div>
+        </div>
+
+        <div style="display:flex; gap: 12px; flex-wrap: wrap; margin-top: 10px;">
+          <button class="btn-primary" id="btn-save-room" onclick="saveRoomDetails()"><i class="fas fa-save"></i> Save
+            Room Details</button>
+          <button class="btn-primary" id="btn-start-match" onclick="startSelectedMatch()"><i
+              class="fas fa-flag-checkered"></i> Start Match</button>
+          <button class="btn-primary btn-danger" id="btn-clear-room" onclick="clearRoomInputs()"><i
+              class="fas fa-eraser"></i> Clear Inputs</button>
+        </div>
+
+        <div style="margin-top: 16px; font-size: 12px; color: var(--text-muted);">
+          Selected Tournament:
+          <span id="selected-tournament-label"
+            style="color: var(--accent-cyan); font-family: var(--font-mono);">None</span>
+        </div>
+      </div>
+
+      <div class="glass-panel">
+        <div class="panel-title"><i class="fas fa-crosshairs"></i> Active Match Operations</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Operation</th>
+              <th>Prize</th>
+              <th>Status</th>
+              <th>Room</th>
+              <th>Command</th>
+            </tr>
+          </thead>
+          <tbody id="admin-matches-body">
+            <tr>
+              <td colspan="5" style="text-align:center;"><i class="fas fa-spinner fa-spin"></i> Loading...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB: UTR REQUESTS -->
+    <section id="tab-utr" class="admin-section">
+      <div class="glass-panel">
+        <div class="panel-title"><i class="fas fa-receipt"></i> UTR Join Requests</div>
+        <div class="hint">Players who paid via UPI submit UTR. Approve to add them to tournament participants.</div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Player</th>
+              <th>UTR</th>
+              <th>Amount</th>
+              <th>Tournament</th>
+              <th>Command</th>
+            </tr>
+          </thead>
+          <tbody id="utr-requests-body">
+            <tr>
+              <td colspan="5" style="text-align:center;"><i class="fas fa-spinner fa-spin"></i> Loading...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB: SPONSORSHIP -->
+    <section id="tab-sponsor" class="admin-section">
+      <div class="glass-panel">
+        <div class="panel-title"><i class="fas fa-star"></i> Sponsorship</div>
+
+        <!-- Admin apply for sponsor -->
+        <div class="glass-panel" style="margin-bottom: 18px;">
+          <div class="panel-title"><i class="fas fa-paper-plane"></i> Apply for Sponsorship (Admin/Organizer)</div>
+          <div class="hint">Send a request to Owner with budget, days, and message.</div>
+
+          <form id="sponsor-apply-form">
+            <div class="input-group">
+              <label>Budget (₹)</label>
+              <input type="number" id="s-budget" required placeholder="e.g. 5000" />
+            </div>
+            <div class="input-group">
+              <label>For how many days?</label>
+              <input type="number" id="s-days" required placeholder="e.g. 7" />
+            </div>
+            <div class="input-group">
+              <label>Message (optional)</label>
+              <textarea id="s-message" placeholder="Any details..."></textarea>
+            </div>
+            <button type="submit" class="btn-primary" id="btn-sponsor-apply">Submit Request</button>
+            <div class="muted" id="sponsor-apply-msg"></div>
+          </form>
+        </div>
+
+        <!-- Owner controls -->
+        <div class="glass-panel" id="owner-sponsor-controls" style="display:none;">
+          <div class="panel-title"><i class="fas fa-crown"></i> Owner Sponsorship Controls</div>
+          <div class="hint">Only OWNER can mark tournaments as sponsored.</div>
+
+          <div class="input-group">
+            <label>Selected Tournament</label>
+            <div class="mono" id="owner-sponsor-selected">None</div>
+          </div>
+
+          <div class="input-group">
+            <label>Sponsored?</label>
+            <select id="owner-s-sponsored">
+              <option value="false">No</option>
+              <option value="true">Yes</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label>Sponsor Name</label>
+            <input id="owner-s-name" type="text" placeholder="Brand / Sponsor name" />
+          </div>
+
+          <div class="input-group">
+            <label>Banner URL (Optional)</label>
+            <input id="owner-s-banner" type="url" placeholder="https://..." />
+          </div>
+
+          <button class="btn-primary" id="btn-owner-save-sponsor"><i class="fas fa-save"></i> Save Sponsor
+            Settings</button>
+          <div class="muted" id="owner-sponsor-msg"></div>
+        </div>
+
+        <!-- Owner sees sponsor requests -->
+        <div class="glass-panel" id="owner-sponsor-requests" style="display:none;">
+          <div class="panel-title"><i class="fas fa-inbox"></i> Sponsor Requests (Owner)</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Admin</th>
+                <th>Budget</th>
+                <th>Days</th>
+                <th>Message</th>
+                <th>Command</th>
+              </tr>
+            </thead>
+            <tbody id="sponsor-requests-body">
+              <tr>
+                <td colspan="5" style="text-align:center;"><i class="fas fa-spinner fa-spin"></i> Loading...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="../assets/js/admin.js"></script>
+  <script>
+    function switchTab(ev, tabId) {
+      document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      ev.currentTarget.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registration Submitted | FF Arena</title>
+    <meta name="description" content="Your tournament registration has been submitted successfully." />
+    <meta name="theme-color" content="#00F0FF" />
+    <link rel="canonical" href="https://ffarena.live/user/registration-success.html" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="assets/css/app.css" />
+
+    <style>
+        :root {
+            --ff-orange: #FF6B00;
+            --ff-cyan: #00F0FF;
+            --ff-magenta: #FF00E5;
+            --ff-yellow: #FFD700;
+            --bg0: #05070B;
+            --bg1: #070A10;
+            --card: rgba(14, 18, 30, 0.84);
+            --border: rgba(0, 240, 255, 0.14);
+            --text: #E6EEF9;
+            --muted: #7B92B3;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+            background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(0, 240, 255, 0.10), transparent 60%),
+                radial-gradient(ellipse 60% 40% at 80% 90%, rgba(255, 0, 229, 0.06), transparent 60%),
+                linear-gradient(180deg, var(--bg0), var(--bg1));
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(6, 8, 12, 0.84);
+            backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 18px;
+            min-height: 68px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 26px;
+            letter-spacing: 3px;
+            color: var(--ff-orange);
+            text-decoration: none;
+            font-weight: 900;
+        }
+
+        .logo span {
+            color: var(--ff-cyan);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            padding: 10px 12px;
+            border-radius: 999px;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--ff-cyan);
+            background: rgba(0, 240, 255, 0.06);
+            border-color: rgba(0, 240, 255, 0.18);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 240, 255, 0.16);
+            background: rgba(0, 240, 255, 0.04);
+            flex-shrink: 0;
+        }
+
+        .hamburger span {
+            width: 22px;
+            height: 2px;
+            background: var(--ff-cyan);
+            border-radius: 1px;
+        }
+
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 68px;
+            left: 0;
+            right: 0;
+            background: rgba(6, 8, 12, 0.97);
+            backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--border);
+            padding: 14px 18px;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 998;
+        }
+
+        .mobile-nav.open {
+            display: flex;
+        }
+
+        .mobile-nav a {
+            color: var(--muted);
+            text-decoration: none;
+            padding: 12px 14px;
+            font-size: 14px;
+            font-weight: 800;
+            border-radius: 14px;
+            border: 1px solid rgba(0, 240, 255, 0.10);
+            background: rgba(0, 240, 255, 0.03);
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            display: grid;
+            place-items: center;
+            padding: 40px 18px;
+        }
+
+        .card {
+            width: min(720px, 94vw);
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 18px 60px rgba(0, 0, 0, 0.55);
+            text-align: center;
+        }
+
+        .success-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(36px, 6vw, 56px);
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+            color: var(--text);
+        }
+
+        .ok {
+            color: var(--ff-cyan);
+            font-weight: 800;
+            font-size: 18px;
+            margin-bottom: 24px;
+        }
+
+        #meta {
+            background: rgba(0, 240, 255, 0.05);
+            border: 1px solid rgba(0, 240, 255, 0.12);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 24px 0;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        #meta strong {
+            color: var(--ff-cyan);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 214, 0, 0.10);
+            border: 1px solid rgba(255, 214, 0, 0.25);
+            color: var(--ff-yellow);
+            padding: 10px 20px;
+            border-radius: 999px;
+            font-weight: 800;
+            font-size: 14px;
+            margin: 16px 0;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 24px;
+            border-radius: 14px;
+            font-weight: 900;
+            font-size: 14px;
+            text-decoration: none;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+            cursor: pointer;
+            margin: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--ff-orange), #FF3D00);
+            color: #fff;
+            border-color: rgba(255, 107, 0, 0.18);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 40px rgba(255, 107, 0, 0.25);
+        }
+
+        .btn-ghost {
+            background: rgba(0, 240, 255, 0.06);
+            color: var(--ff-cyan);
+            border-color: rgba(0, 240, 255, 0.20);
+        }
+
+        .btn-ghost:hover {
+            transform: translateY(-2px);
+            border-color: rgba(0, 240, 255, 0.40);
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
+        }
+
+        @media (max-width: 780px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .card {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <a class="logo" href="index.html" aria-label="FF Arena home">FF<span>ARENA</span></a>
+        <ul class="nav-links">
+            <li><a href="index.html" data-page="home">Home</a></li>
+            <li><a href="index.html#tournaments" data-page="tournaments">Tournaments</a></li>
+            <li><a href="tournaments/leaderboard.html" data-page="leaderboard">Leaderboard</a></li>
+            <li><a href="news/news.html" data-page="news">News</a></li>
+            <li><a href="user/lfg.html" data-page="lfg">Find Team</a></li>
+            <li><a href="about.html" data-page="about">About</a></li>
+            <li><a href="contact.html" data-page="contact">Contact</a></li>
+            <li><a href="user/user-dashboard.html" data-page="dashboard" class="nav-cta"
+                    style="background: var(--ff-cyan); color: var(--bg0); padding: 8px 16px; border-radius: 8px;">Dashboard</a>
+            </li>
+        </ul>
+        <button id="hamburger" class="hamburger" aria-label="Open menu" aria-expanded="false"
+            onclick="toggleMobileNav()">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <div class="mobile-nav" id="mobileNav">
+        <a href="index.html" onclick="closeMobileNav()">Home</a>
+        <a href="index.html#tournaments" onclick="closeMobileNav()">Tournaments</a>
+        <a href="tournaments/leaderboard.html" onclick="closeMobileNav()">Leaderboard</a>
+        <a href="news/news.html" onclick="closeMobileNav()">News</a>
+        <a href="user/lfg.html" onclick="closeMobileNav()">Find Team</a>
+        <a href="about.html" onclick="closeMobileNav()">About</a>
+        <a href="contact.html" onclick="closeMobileNav()">Contact</a>
+        <a href="user/user-dashboard.html" onclick="closeMobileNav()">Dashboard</a>
+    </div>
+
+    <main>
+        <div class="card">
+            <div class="success-icon">✅</div>
+            <h1>Registration Submitted</h1>
+            <p class="ok">Your team has been submitted successfully!</p>
+
+            <div id="meta"></div>
+
+            <div class="status-badge">
+                <span>⏳</span>
+                <span>Pending Admin Approval</span>
+            </div>
+
+            <p style="color: var(--muted); margin-bottom: 24px;">
+                You can track your registration status from your dashboard.
+            </p>
+
+            <div>
+                <a href="user/user-dashboard.html" class="btn btn-primary">📋 My Tournaments</a>
+                <a href="index.html" class="btn btn-ghost">← Back to Home</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function toggleMobileNav() {
+            const nav = document.getElementById('mobileNav');
+            const btn = document.getElementById('hamburger');
+            nav.classList.toggle('open');
+            btn.setAttribute('aria-expanded', nav.classList.contains('open'));
+        }
+
+        function closeMobileNav() {
+            document.getElementById('mobileNav').classList.remove('open');
+            document.getElementById('hamburger').setAttribute('aria-expanded', 'false');
+        }
+
+        // Populate meta from URL
+        const u = new URL(location.href);
+        const team = u.searchParams.get('team') || '—';
+        const tournament = u.searchParams.get('tournament') || '—';
+        document.getElementById('meta').innerHTML = `
+            <div>Team: <strong>${team}</strong></div>
+            <div>Tournament: <strong>${tournament}</strong></div>
+        `;
+    </script>
+</body>
+
+</html>

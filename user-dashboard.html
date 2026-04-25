@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — FFArena</title>
+  <meta name="description" content="Your FFArena dashboard. View stats, join tournaments, manage wallet, and track your progress.">
+  <link rel="stylesheet" href="../assets/css/app.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-xl);
+      flex-wrap: wrap;
+      gap: var(--space-md);
+    }
+
+    .player-info {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+    }
+
+    .player-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 2px solid var(--primary-cyan);
+      object-fit: cover;
+      box-shadow: 0 0 20px var(--primary-glow-soft);
+    }
+
+    .player-name {
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+      color: var(--text-main);
+      font-weight: 700;
+    }
+
+    .player-role {
+      font-size: 0.75rem;
+      color: var(--primary-cyan);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 600;
+    }
+
+    /* Dashboard Grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: var(--space-lg);
+    }
+
+    @media (max-width: 1000px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Wallet Section */
+    .wallet-section {
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+      text-align: center;
+    }
+
+    .wallet-label {
+      color: var(--primary-cyan);
+      font-size: 0.75rem;
+      font-family: var(--font-heading);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: var(--space-sm);
+    }
+
+    .wallet-amount {
+      font-family: var(--font-heading);
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: var(--text-main);
+      margin-bottom: var(--space-lg);
+    }
+
+    .wallet-actions {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    /* Tournament table */
+    .tournament-table-wrap {
+      overflow-x: auto;
+    }
+
+    .tournament-table-wrap table th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    /* Quick actions */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+
+    .quick-action {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: var(--space-md);
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .quick-action i {
+      font-size: 1.2rem;
+      color: var(--primary-cyan);
+    }
+
+    .quick-action:hover {
+      background: rgba(0, 240, 255, 0.05);
+      border-color: var(--border-glow);
+      color: var(--text-main);
+      transform: translateY(-2px);
+    }
+
+    /* Mobile sidebar toggle */
+    .mobile-toggle {
+      display: none;
+      position: fixed;
+      top: var(--space-md);
+      left: var(--space-md);
+      z-index: 1001;
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-glass);
+      color: var(--text-main);
+      font-size: 1.2rem;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (max-width: 900px) {
+      .mobile-toggle { display: flex; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Mobile Toggle -->
+  <button class="mobile-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <a href="../index.html" class="sidebar-logo">FF<span class="accent">ARENA</span></a>
+    <nav class="nav-menu">
+      <a href="user-dashboard.html" class="nav-item active"><i class="fas fa-th-large"></i> Dashboard</a>
+      <a href="my-tournaments.html" class="nav-item"><i class="fas fa-trophy"></i> My Tournaments</a>
+      <a href="../tournaments/tournament.html" class="nav-item"><i class="fas fa-list"></i> Browse Tournaments</a>
+      <a href="../tournaments/leaderboard.html" class="nav-item"><i class="fas fa-crown"></i> Leaderboard</a>
+      <a href="team.html" class="nav-item"><i class="fas fa-users"></i> My Squad</a>
+      <a href="lfg.html" class="nav-item"><i class="fas fa-search"></i> Find Players</a>
+      <a href="settings.html" class="nav-item"><i class="fas fa-cog"></i> Settings</a>
+      <a href="#" class="nav-item" id="adminNav" style="display:none" onclick="goAdminPanel()"><i class="fas fa-shield-halved"></i> Admin Panel</a>
+      <a href="#" class="nav-item logout-btn" id="logoutBtn"><i class="fas fa-right-from-bracket"></i> Disconnect</a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="page-header animate-fade-up">
+      <div class="player-info">
+        <img id="player-avatar"
+          src="https://ui-avatars.com/api/?name=Player&background=0a0a1a&color=00f0ff&bold=true&size=128"
+          class="player-avatar" alt="Avatar">
+        <div>
+          <div class="player-name">Welcome, <span id="player-ign" class="text-gradient">Player</span></div>
+          <div class="player-role" id="player-role">Free Fire Profile</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid animate-fade-up delay-1">
+      <div class="stat-card">
+        <div class="stat-icon cyan"><i class="fas fa-gamepad"></i></div>
+        <div>
+          <div class="stat-label">Matches</div>
+          <div class="stat-value" id="stat-matches">0</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon pink"><i class="fas fa-crosshairs"></i></div>
+        <div>
+          <div class="stat-label">Kills</div>
+          <div class="stat-value" id="stat-kills">0</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon purple"><i class="fas fa-fire"></i></div>
+        <div>
+          <div class="stat-label">K/D Ratio</div>
+          <div class="stat-value" id="stat-kd">0.00</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green"><i class="fas fa-indian-rupee-sign"></i></div>
+        <div>
+          <div class="stat-label">Earnings</div>
+          <div class="stat-value" id="stat-earnings">₹0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dashboard Grid -->
+    <div class="dashboard-grid animate-fade-up delay-2">
+      <!-- Left: Tournaments -->
+      <div class="glass-panel-static" style="padding: var(--space-lg);">
+        <div class="section-header">
+          <h3><i class="fas fa-bolt" style="color:var(--primary-cyan);margin-right:8px;"></i>Available Tournaments</h3>
+        </div>
+        <div class="tournament-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Tournament</th>
+                <th>Entry</th>
+                <th>Prize</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="available-tournaments-body">
+              <tr>
+                <td colspan="4" class="text-center" style="padding:40px;">
+                  <div class="spinner"></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Right: Wallet & Quick Actions -->
+      <div style="display:flex; flex-direction:column; gap:var(--space-lg);">
+        <div class="glass-panel-static wallet-card wallet-section">
+          <div class="wallet-label"><i class="fas fa-gem"></i> Arena Wallet</div>
+          <div class="wallet-amount" id="wallet-balance">₹0.00</div>
+          <div class="wallet-actions">
+            <button class="cyber-btn cyber-btn-filled w-full" onclick="openModal()" style="justify-content:center;">
+              <i class="fas fa-plus"></i> Add Funds
+            </button>
+            <button class="cyber-btn w-full" onclick="requestWithdrawal()" style="justify-content:center;">
+              <i class="fas fa-arrow-up-from-bracket"></i> Withdraw
+            </button>
+          </div>
+        </div>
+
+        <div class="glass-panel-static" style="padding:var(--space-lg);">
+          <h4 style="margin-bottom:var(--space-md); font-size:0.85rem; color:var(--text-muted);">Quick Actions</h4>
+          <div class="quick-actions">
+            <a href="my-tournaments.html" class="quick-action">
+              <i class="fas fa-trophy"></i> My Matches
+            </a>
+            <a href="#" class="quick-action" onclick="goAdminPanel(); return false;">
+              <i class="fas fa-shield-halved"></i> Organizer
+            </a>
+            <a href="settings.html" class="quick-action">
+              <i class="fas fa-cog"></i> Settings
+            </a>
+            <a href="../tournaments/leaderboard.html" class="quick-action">
+              <i class="fas fa-crown"></i> Rankings
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Top-Up Modal -->
+  <div class="modal-overlay" id="topupModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()"><i class="fas fa-xmark"></i></button>
+      <h3 style="margin-bottom:var(--space-sm);">Deposit <span class="text-gradient">Funds</span></h3>
+      <p style="font-size:0.85rem; margin-bottom:var(--space-lg);">Pay to the UPI below and submit your transaction reference</p>
+
+      <div style="text-align:center; margin-bottom:var(--space-lg);">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=9415515687@upi&bgcolor=0a0a1a&color=00f0ff"
+          style="width:140px; border-radius:var(--radius-md); border:1px solid var(--border-glass);" alt="QR Code">
+        <div style="margin-top:var(--space-sm); font-family:var(--font-mono); color:var(--primary-cyan); font-size:0.9rem;">
+          9415515687@upi
+        </div>
+      </div>
+
+      <div class="input-group">
+        <input type="number" id="deposit-amount" placeholder=" " min="10" required>
+        <label>Amount (₹)</label>
+      </div>
+      <div class="input-group">
+        <input type="text" id="utr-number" placeholder=" " required>
+        <label>UTR / Reference Number</label>
+      </div>
+      <button id="submit-utr-btn" class="cyber-btn cyber-btn-success w-full" style="justify-content:center;">
+        <i class="fas fa-check"></i> Submit Deposit
+      </button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../assets/js/supabase.js"></script>
+  <script>
+    let currentUser, currentProfile;
+
+    async function init() {
+      const session = await getSession();
+      if (!session) return;
+      currentUser = session.user;
+
+      const { data: profile, error } = await supabase.from('profiles').select('*').eq('id', currentUser.id).single();
+      if (!profile || error) {
+        // Profile might not exist yet (trigger should create it, but fallback)
+        await supabase.from('profiles').insert({
+          id: currentUser.id, email: currentUser.email,
+          ign: 'Player', ff_uid: '', wallet_balance: 0, role: 'USER'
+        });
+        window.location.reload();
+        return;
+      }
+      currentProfile = profile;
+
+      // Update UI
+      document.getElementById('player-ign').textContent = profile.ign || 'Player';
+      document.getElementById('player-avatar').src = profile.avatar_url ||
+        `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.ign || 'Player')}&background=0a0a1a&color=00f0ff&bold=true&size=128`;
+      document.getElementById('stat-matches').textContent = profile.matches_played || 0;
+      document.getElementById('stat-kills').textContent = profile.total_kills || 0;
+      document.getElementById('stat-kd').textContent = (profile.matches_played > 0
+        ? (profile.total_kills / profile.matches_played).toFixed(2) : '0.00');
+      document.getElementById('stat-earnings').textContent = '₹' + (profile.total_earnings || 0);
+      document.getElementById('wallet-balance').textContent = '₹' + (profile.wallet_balance || 0).toFixed(2);
+
+      // Show admin link if admin/owner
+      if (['ADMIN', 'OWNER'].includes(profile.role)) {
+        document.getElementById('adminNav').style.display = 'flex';
+        document.getElementById('player-role').textContent = profile.role;
+      }
+
+      loadTournaments();
+    }
+
+    async function loadTournaments() {
+      const { data } = await supabase.from('tournaments').select('*').eq('status', 'UPCOMING').order('start_time');
+      const tbody = document.getElementById('available-tournaments-body');
+      if (!data || data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:30px;">
+          <div class="empty-state" style="padding:0;"><i class="fas fa-calendar-xmark" style="font-size:1.5rem;"></i>
+          <p style="margin-top:8px; font-size:0.85rem;">No upcoming tournaments</p></div></td></tr>`;
+        return;
+      }
+      tbody.innerHTML = data.map(t => `
+        <tr>
+          <td>
+            <div style="font-weight:600; color:var(--text-main);">${t.title}</div>
+            <div style="font-size:0.75rem; color:var(--text-dim); margin-top:2px;">${t.mode || 'BR'} · ${new Date(t.start_time).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</div>
+          </td>
+          <td><span style="color:var(--text-main); font-weight:600;">₹${t.entry_fee}</span></td>
+          <td><span style="color:var(--primary-cyan); font-weight:700;">₹${t.prize_pool}</span></td>
+          <td><button class="cyber-btn cyber-btn-sm" style="padding:6px 14px;" onclick="joinTournament('${t.id}', ${t.entry_fee})">Join</button></td>
+        </tr>
+      `).join('');
+    }
+
+    window.joinTournament = async (tournamentId, fee) => {
+      if (fee <= 0) {
+        const { error } = await supabase.from('tournament_participants').insert({
+          tournament_id: tournamentId, user_id: currentUser.id
+        });
+        if (error) alert(error.message);
+        else { alert('Joined tournament!'); window.location.reload(); }
+        return;
+      }
+      const choice = confirm(`Pay ₹${fee}?\nOK = Wallet | Cancel = UTR upload`);
+      if (choice) {
+        const { data, error } = await supabase.rpc('join_tournament_with_wallet', {
+          p_tournament_id: parseInt(tournamentId)
+        });
+        if (error) alert(error.message);
+        else {
+          alert(data?.message || 'Joined!');
+          window.location.reload();
+        }
+      } else {
+        const utr = prompt('Enter UTR/Reference after transfer:');
+        if (utr) {
+          const { data, error } = await supabase.rpc('request_join_with_utr', {
+            p_tournament_id: parseInt(tournamentId), p_utr: utr
+          });
+          if (error) alert(error.message);
+          else window.location.href = 'registration-success.html?tournament=' + tournamentId +
+            '&team=' + (currentProfile.ign || 'Player');
+        }
+      }
+    };
+
+    // Organizer panel routing
+    window.goAdminPanel = async function () {
+      if (!currentUser) return;
+      const { data: p } = await supabase.from('profiles')
+        .select('id, role, email').eq('id', currentUser.id).maybeSingle();
+
+      const role = p?.role || 'USER';
+      if (role === 'ADMIN' || role === 'OWNER') {
+        window.location.href = '../admin/ff-admin-dashboard.html';
+        return;
+      }
+
+      const { data: app } = await supabase.from('organizer_applications')
+        .select('id, status, created_at, org_name')
+        .eq('user_id', currentUser.id)
+        .order('created_at', { ascending: false })
+        .limit(1).maybeSingle();
+
+      if (!app) {
+        window.location.href = `../organizers/apply.html?email=${encodeURIComponent(p?.email || currentUser.email || '')}`;
+      } else if (app.status === 'PENDING') {
+        window.location.href = '../organizers/application-status.html';
+      } else if (app.status === 'REJECTED') {
+        window.location.href = `../organizers/apply.html?email=${encodeURIComponent(p?.email || currentUser.email || '')}&retry=1`;
+      } else {
+        window.location.href = '../organizers/application-status.html';
+      }
+    };
+
+    // Withdrawal
+    window.requestWithdrawal = async function () {
+      const amount = Number(prompt("Enter amount to withdraw (Min ₹50):") || 0);
+      if (!amount || amount < 50) return;
+
+      const { data: profile } = await supabase.from('profiles')
+        .select('wallet_balance, upi_id').eq('id', currentUser.id).single();
+
+      if (!profile?.upi_id) return alert("Please set your UPI ID in Settings first!");
+      if (Number(profile.wallet_balance || 0) < amount) return alert("Insufficient balance!");
+
+      const newBal = Number(profile.wallet_balance || 0) - amount;
+      await supabase.from('profiles').update({
+        wallet_balance: newBal, updated_at: new Date().toISOString()
+      }).eq('id', currentUser.id);
+
+      await supabase.from('wallet_transactions').insert([{
+        user_id: currentUser.id, amount, transaction_type: 'WITHDRAWAL', status: 'PENDING'
+      }]);
+
+      alert("Withdrawal requested! Admin will process it shortly.");
+      window.location.reload();
+    };
+
+    // Modal
+    function openModal() { document.getElementById('topupModal').classList.add('active'); }
+    function closeModal() { document.getElementById('topupModal').classList.remove('active'); }
+
+    // Deposit
+    document.getElementById('submit-utr-btn').addEventListener('click', async () => {
+      const amount = parseFloat(document.getElementById('deposit-amount').value);
+      const utr = document.getElementById('utr-number').value.trim();
+      if (!amount || amount < 10) { alert('Minimum deposit is ₹10'); return; }
+      if (!utr || utr.length < 6) { alert('Enter a valid UTR number'); return; }
+
+      const btn = document.getElementById('submit-utr-btn');
+      btn.innerHTML = '<div class="spinner" style="width:16px;height:16px;border-width:2px;"></div> Submitting...';
+
+      const { error } = await supabase.from('wallet_transactions').insert({
+        user_id: currentUser.id, amount, transaction_type: 'DEPOSIT',
+        reference_id: utr, status: 'PENDING'
+      });
+
+      if (error) {
+        alert(error.message);
+        btn.innerHTML = '<i class="fas fa-check"></i> Submit Deposit';
+      } else {
+        alert('Deposit submitted! It will be reviewed and added to your wallet.');
+        closeModal();
+        btn.innerHTML = '<i class="fas fa-check"></i> Submit Deposit';
+        document.getElementById('deposit-amount').value = '';
+        document.getElementById('utr-number').value = '';
+      }
+    });
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+      e.preventDefault();
+      await supabase.auth.signOut();
+      window.location.href = '../index.html';
+    });
+
+    window.addEventListener('load', init);
+  </script>
+</body>
+
+</html>

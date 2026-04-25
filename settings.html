@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings - FF Arena</title>
+    <link rel="stylesheet" href="../assets/css/app.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            display: flex;
+            background-color: var(--bg-dark);
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: rgba(11, 12, 16, 0.9);
+            border-right: 1px solid var(--border-glass);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            color: #fff;
+            text-decoration: none;
+            text-align: center;
+            margin-bottom: 40px;
+            letter-spacing: 2px;
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: rgba(0, 242, 254, 0.1);
+            color: var(--primary-cyan);
+            box-shadow: inset 4px 0 0 var(--primary-cyan);
+        }
+
+        .logout-btn {
+            margin-top: auto;
+            color: #ff4757;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 40px;
+            max-width: 1000px;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 900px) {
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .settings-card {
+            background: rgba(20, 22, 30, 0.6);
+            border: 1px solid var(--border-glass);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .settings-card h2 {
+            font-size: 1.3rem;
+            color: #fff;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--border-glass);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .settings-card h2 i {
+            color: var(--primary-cyan);
+        }
+
+        /* HUD Inputs */
+        .input-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .input-group input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-glass);
+            border-radius: 8px;
+            padding: 15px 20px;
+            color: #fff;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-group label {
+            position: absolute;
+            left: 20px;
+            top: 15px;
+            color: var(--text-muted);
+            font-family: var(--font-heading);
+            font-size: 0.9rem;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary-cyan);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.15) inset;
+            background: rgba(0, 242, 254, 0.02);
+        }
+
+        .input-group input:focus~label,
+        .input-group input:valid~label {
+            top: -10px;
+            left: 15px;
+            font-size: 0.75rem;
+            color: var(--primary-cyan);
+            background: var(--bg-dark);
+            padding: 0 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+        <a href="../index.html" class="sidebar-logo">FF <span class="text-gradient">ARENA</span></a>
+        <nav class="nav-menu">
+            <a href="user-dashboard.html" class="nav-item"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a href="my-tournaments.html" class="nav-item"><i class="fas fa-trophy"></i> My Tournaments</a>
+            <a href="team.html" class="nav-item"><i class="fas fa-users"></i> My Squad</a>
+            <a href="lfg.html" class="nav-item"><i class="fas fa-search"></i> Find Players</a>
+            <a href="settings.html" class="nav-item active"><i class="fas fa-cog"></i> Settings</a>
+            <a href="../index.html" class="nav-item logout-btn"><i class="fas fa-sign-out-alt"></i> Disconnect</a>
+        </nav>
+    </aside>
+
+    <main class="main-content animate-fade-up">
+        <h1 style="color: #fff; font-size: 2rem; margin-bottom: 30px;">Account <span
+                class="text-gradient">Settings</span></h1>
+
+        <div class="settings-grid">
+
+            <!-- Profile Info -->
+            <div class="settings-card delay-1">
+                <h2><i class="fas fa-user"></i> Player Identity</h2>
+                <form onsubmit="event.preventDefault(); alert('Profile Updated!');">
+                    <div class="input-group">
+                        <input type="text" id="setting-ign" placeholder="In-Game Name">
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="setting-uid" placeholder="Free Fire UID">
+                    </div>
+                    <div class="input-group">
+                        <input type="email" id="setting-email" placeholder="Email Address">
+                    </div>
+                    <button id="save-settings-btn" class="cyber-btn">Update Profile</button>
+                </form>
+            </div>
+
+            <!-- Financials / Payouts -->
+            <div class="settings-card delay-2">
+                <h2><i class="fas fa-money-bill-wave"></i> Payout Details</h2>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 20px;">This UPI ID will be used
+                    for transferring your tournament prize money and wallet withdrawals.</p>
+                <form onsubmit="event.preventDefault(); alert('Payout Details Updated!');">
+                    <div class="input-group">
+                        <input type="text" id="setting-upi" placeholder="Your UPI ID for Withdrawals">
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="setting-phone" placeholder="WhatsApp Number">
+                    </div>
+                    <button id="save-settings-btn" class="cyber-btn">Update Profile</button>
+                </form>
+            </div>
+
+        </div>
+    </main>
+
+    <script type="module" src="../assets/js/settings.js"></script>
+
+</body>
+
+</html>
