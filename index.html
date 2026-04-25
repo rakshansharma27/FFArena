@@ -10,309 +10,7 @@
   <link rel="stylesheet" href="assets/css/app.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    body {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-
-    /* ====== HERO ====== */
-    .hero {
-      position: relative;
-      min-height: 90vh;
-      display: flex;
-      align-items: center;
-      padding-top: 70px;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background:
-        radial-gradient(ellipse at 20% 50%, rgba(0, 240, 255, 0.12), transparent 60%),
-        radial-gradient(ellipse at 80% 20%, rgba(124, 58, 237, 0.08), transparent 50%),
-        radial-gradient(ellipse at 60% 90%, rgba(255, 0, 85, 0.05), transparent 40%);
-      z-index: 0;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      max-width: 700px;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 18px;
-      border-radius: var(--radius-full);
-      background: rgba(0, 240, 255, 0.08);
-      border: 1px solid rgba(0, 240, 255, 0.2);
-      color: var(--primary-cyan);
-      font-size: 0.75rem;
-      font-weight: 700;
-      font-family: var(--font-heading);
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: var(--space-lg);
-    }
-
-    .hero-badge i {
-      font-size: 0.6rem;
-      animation: pulse-badge 2s ease-in-out infinite;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.5rem, 6vw, 4.5rem);
-      line-height: 1.05;
-      margin-bottom: var(--space-lg);
-      font-weight: 900;
-    }
-
-    .hero p {
-      font-size: 1.15rem;
-      max-width: 540px;
-      margin-bottom: var(--space-xl);
-      line-height: 1.8;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: var(--space-md);
-      flex-wrap: wrap;
-    }
-
-    .hero-stats {
-      display: flex;
-      gap: var(--space-xl);
-      margin-top: var(--space-2xl);
-      padding-top: var(--space-lg);
-      border-top: 1px solid var(--border-glass);
-    }
-
-    .hero-stat-item .stat-num {
-      font-family: var(--font-heading);
-      font-size: 2rem;
-      font-weight: 900;
-      color: var(--text-main);
-    }
-
-    .hero-stat-item .stat-label {
-      color: var(--text-dim);
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-top: 2px;
-    }
-
-    /* Animated grid lines in hero */
-    .hero-grid {
-      position: absolute;
-      top: 0;
-      right: -10%;
-      width: 60%;
-      height: 100%;
-      background-image:
-        linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
-      background-size: 60px 60px;
-      mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
-      -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
-      z-index: 1;
-    }
-
-    /* ====== SECTIONS ====== */
-    section {
-      padding: var(--space-2xl) 0;
-      position: relative;
-      z-index: 1;
-    }
-
-    .section-intro {
-      text-align: center;
-      max-width: 600px;
-      margin: 0 auto var(--space-xl);
-    }
-
-    .section-intro h2 {
-      margin-bottom: var(--space-sm);
-    }
-
-    /* Features Grid */
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: var(--space-lg);
-    }
-
-    .feature-card {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-glass);
-      border-radius: var(--radius-lg);
-      padding: var(--space-xl);
-      transition: all 0.4s var(--ease-out);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .feature-card::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--primary-cyan), transparent);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .feature-card:hover {
-      transform: translateY(-6px);
-      border-color: var(--border-glow);
-      box-shadow: var(--shadow-glow);
-    }
-
-    .feature-card:hover::after {
-      opacity: 1;
-    }
-
-    .feature-icon {
-      width: 56px;
-      height: 56px;
-      border-radius: var(--radius-md);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      margin-bottom: var(--space-md);
-      background: rgba(0, 240, 255, 0.08);
-      color: var(--primary-cyan);
-    }
-
-    .feature-card h3 {
-      font-size: 1.1rem;
-      margin-bottom: var(--space-sm);
-    }
-
-    .feature-card p {
-      font-size: 0.9rem;
-      color: var(--text-dim);
-    }
-
-    /* Tournament Cards Section */
-    .tournament-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: var(--space-lg);
-    }
-
-    .t-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: var(--space-md);
-    }
-
-    .t-card-title {
-      font-family: var(--font-heading);
-      font-size: 1.15rem;
-      color: var(--text-main);
-      font-weight: 700;
-    }
-
-    .t-card-meta {
-      display: flex;
-      gap: var(--space-md);
-      flex-wrap: wrap;
-      margin-bottom: var(--space-md);
-    }
-
-    .t-card-meta span {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-    }
-
-    .t-card-meta strong {
-      color: var(--text-main);
-    }
-
-    .t-card-meta .prize {
-      color: var(--primary-cyan);
-      font-weight: 700;
-    }
-
-    .t-card-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-top: var(--space-md);
-      border-top: 1px solid var(--border-glass);
-    }
-
-    .t-card-footer .slots {
-      font-size: 0.8rem;
-      color: var(--text-dim);
-    }
-
-    /* CTA Section */
-    .cta-section {
-      text-align: center;
-      padding: var(--space-2xl) 0;
-    }
-
-    .cta-box {
-      background: linear-gradient(135deg, rgba(0, 240, 255, 0.06), rgba(124, 58, 237, 0.06));
-      border: 1px solid rgba(0, 240, 255, 0.1);
-      border-radius: var(--radius-xl);
-      padding: var(--space-2xl);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .cta-box::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle at 30% 50%, rgba(0, 240, 255, 0.03), transparent 40%);
-      pointer-events: none;
-    }
-
-    .cta-box h2 {
-      font-size: clamp(1.5rem, 3vw, 2.5rem);
-      margin-bottom: var(--space-md);
-    }
-
-    .cta-box p {
-      max-width: 500px;
-      margin: 0 auto var(--space-xl);
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .hero {
-        min-height: auto;
-        padding: 120px 0 60px;
-      }
-
-      .hero-stats {
-        flex-wrap: wrap;
-        gap: var(--space-lg);
-      }
-
-      .hero-grid {
-        display: none;
-      }
-    }
+    body { display: flex; flex-direction: column; min-height: 100vh; }
   </style>
 </head>
 
@@ -321,18 +19,18 @@
   <nav class="public-nav" id="mainNav">
     <a href="index.html" class="nav-logo">FF<span class="accent">ARENA</span></a>
     <div class="nav-links" id="navLinks">
-      <a href="tournaments/tournament.html">Tournaments</a>
-      <a href="tournaments/leaderboard.html">Leaderboard</a>
-      <a href="news/news.html">News</a>
+      <a href="tournament.html">Tournaments</a>
+      <a href="leaderboard.html">Leaderboard</a>
+      <a href="news.html">News</a>
       <a href="about.html">About</a>
       <a href="contact.html">Contact</a>
     </div>
     <div class="nav-actions" id="navActions">
-      <a href="user/user-login.html" class="cyber-btn cyber-btn-sm" id="signInBtn">
+      <a href="user-login.html" class="cyber-btn cyber-btn-sm" id="signInBtn">
         <i class="fas fa-gamepad"></i> Enter Arena
       </a>
     </div>
-    <button class="nav-toggle" id="navToggle" onclick="document.getElementById('navLinks').classList.toggle('show')">
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
       <i class="fas fa-bars"></i>
     </button>
   </nav>
@@ -353,10 +51,10 @@
           win prize money instantly.
         </p>
         <div class="hero-actions animate-fade-up delay-3">
-          <a href="user/user-login.html" class="cyber-btn cyber-btn-filled">
+          <a href="user-login.html" class="cyber-btn cyber-btn-filled">
             <i class="fas fa-bolt"></i> Start Playing
           </a>
-          <a href="tournaments/tournament.html" class="cyber-btn">
+          <a href="tournament.html" class="cyber-btn">
             <i class="fas fa-trophy"></i> Browse Tournaments
           </a>
         </div>
@@ -381,7 +79,7 @@
   <!-- ====== UPCOMING TOURNAMENTS ====== -->
   <section id="tournaments-section">
     <div class="container">
-      <div class="section-intro animate-fade-up">
+      <div class="section-intro reveal">
         <h2>Upcoming <span class="text-gradient">Tournaments</span></h2>
         <p>Join the next battle and prove your dominance</p>
       </div>
@@ -391,8 +89,8 @@
         <div class="tournament-card skeleton" style="height:200px;"></div>
         <div class="tournament-card skeleton" style="height:200px;"></div>
       </div>
-      <div class="text-center mt-xl animate-fade-up delay-3">
-        <a href="tournaments/tournament.html" class="cyber-btn">
+      <div class="text-center mt-xl reveal delay-3">
+        <a href="tournament.html" class="cyber-btn">
           <i class="fas fa-th-list"></i> View All Tournaments
         </a>
       </div>
@@ -402,45 +100,45 @@
   <!-- ====== FEATURES ====== -->
   <section>
     <div class="container">
-      <div class="section-intro animate-fade-up">
+      <div class="section-intro reveal">
         <h2>Why <span class="text-gradient">FFArena</span>?</h2>
         <p>Professional esports infrastructure at the grassroots level</p>
       </div>
       <div class="features-grid">
-        <div class="feature-card animate-fade-up delay-1">
+        <div class="feature-card reveal delay-1">
           <div class="feature-icon"><i class="fas fa-wallet"></i></div>
           <h3>Instant Wallet</h3>
           <p>Add funds via UPI, join tournaments instantly, and withdraw winnings in minutes.</p>
         </div>
-        <div class="feature-card animate-fade-up delay-2">
+        <div class="feature-card reveal delay-2">
           <div class="feature-icon" style="background:rgba(124,58,237,0.08);color:var(--secondary-purple);">
             <i class="fas fa-shield-halved"></i>
           </div>
           <h3>Verified Organizers</h3>
           <p>Every organizer is vetted and approved. No scams, no fake tournaments.</p>
         </div>
-        <div class="feature-card animate-fade-up delay-3">
+        <div class="feature-card reveal delay-3">
           <div class="feature-icon" style="background:rgba(255,0,85,0.08);color:var(--accent-pink);">
             <i class="fas fa-chart-line"></i>
           </div>
           <h3>Live Leaderboards</h3>
           <p>Real-time scoring, kill tracking, and global rankings updated as you play.</p>
         </div>
-        <div class="feature-card animate-fade-up delay-4">
+        <div class="feature-card reveal delay-4">
           <div class="feature-icon" style="background:rgba(0,255,136,0.08);color:var(--accent-green);">
             <i class="fas fa-trophy"></i>
           </div>
           <h3>Cash Prizes</h3>
           <p>Win real money. Top performers get paid directly to their wallet or UPI.</p>
         </div>
-        <div class="feature-card animate-fade-up delay-5">
+        <div class="feature-card reveal delay-5">
           <div class="feature-icon" style="background:rgba(255,215,0,0.08);color:var(--accent-gold);">
             <i class="fas fa-users-gear"></i>
           </div>
-          <h3>Squad & LFG</h3>
+          <h3>Squad &amp; LFG</h3>
           <p>Build your squad, find teammates, and compete together in team tournaments.</p>
         </div>
-        <div class="feature-card animate-fade-up delay-6">
+        <div class="feature-card reveal delay-6">
           <div class="feature-icon" style="background:rgba(0,240,255,0.08);color:var(--primary-cyan);">
             <i class="fas fa-mobile-screen"></i>
           </div>
@@ -454,10 +152,10 @@
   <!-- ====== CTA ====== -->
   <section class="cta-section">
     <div class="container">
-      <div class="cta-box animate-fade-up">
+      <div class="cta-box reveal">
         <h2>Ready for Your <span class="text-gradient">Booyah</span>?</h2>
         <p>Sign in with Google and start competing in under 30 seconds. No lengthy forms, no downloads.</p>
-        <a href="user/user-login.html" class="cyber-btn cyber-btn-filled">
+        <a href="user-login.html" class="cyber-btn cyber-btn-filled">
           <i class="fab fa-google"></i> Sign in with Google
         </a>
       </div>
@@ -475,21 +173,21 @@
         </div>
         <div class="footer-col">
           <h4>Platform</h4>
-          <a href="tournaments/tournament.html">Tournaments</a>
-          <a href="tournaments/leaderboard.html">Leaderboard</a>
-          <a href="news/news.html">News</a>
+          <a href="tournament.html">Tournaments</a>
+          <a href="leaderboard.html">Leaderboard</a>
+          <a href="news.html">News</a>
           <a href="about.html">About</a>
         </div>
         <div class="footer-col">
           <h4>Support</h4>
           <a href="contact.html">Contact</a>
           <a href="faq.html">FAQ</a>
-          <a href="legal/rules.html">Rules</a>
+          <a href="rules.html">Rules</a>
         </div>
         <div class="footer-col">
           <h4>Legal</h4>
-          <a href="legal/terms.html">Terms of Service</a>
-          <a href="legal/privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms of Service</a>
+          <a href="privacy.html">Privacy Policy</a>
         </div>
       </div>
       <div class="footer-bottom">
@@ -500,10 +198,31 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="assets/js/supabase.js"></script>
+  <script src="assets/js/animations.js"></script>
   <script>
+    // Helpers
+    function formatNumber(n) {
+      if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+      if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+      return String(n);
+    }
+    function formatFee(fee) {
+      var f = Number(fee || 0);
+      return f <= 0 ? 'Free' : '&#8377;' + f;
+    }
+    function formatPrize(prize) {
+      var p = Number(prize || 0);
+      return p <= 0 ? 'TBD' : '&#8377;' + formatNumber(p);
+    }
+
     // Nav scroll effect
-    window.addEventListener('scroll', () => {
+    window.addEventListener('scroll', function () {
       document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    // Mobile nav toggle
+    document.getElementById('navToggle').addEventListener('click', function () {
+      document.getElementById('navLinks').classList.toggle('show');
     });
 
     (async () => {
@@ -511,10 +230,9 @@
       try {
         const { data: { session } } = await supabase.auth.getSession();
         if (session) {
-          // Update nav for logged-in user
           const actions = document.getElementById('navActions');
           actions.innerHTML = `
-            <a href="user/user-dashboard.html" class="cyber-btn cyber-btn-sm">
+            <a href="user-dashboard.html" class="cyber-btn cyber-btn-sm">
               <i class="fas fa-th-large"></i> Dashboard
             </a>
           `;
@@ -546,9 +264,12 @@
           const date = new Date(t.start_time);
           const dateStr = date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
           const timeStr = date.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+          const fee = formatFee(t.entry_fee);
+          const prize = formatPrize(t.prize_pool);
+          const feeColor = fee === 'Free' ? 'var(--accent-green)' : 'var(--text-main)';
 
           return `
-            <div class="tournament-card animate-fade-up delay-${Math.min(i + 1, 6)}" onclick="location.href='tournaments/tournament-details.html?id=${t.id}'">
+            <div class="tournament-card reveal delay-${Math.min(i + 1, 6)}" onclick="location.href='tournament-details.html?id=${t.id}'">
               <div class="t-card-header">
                 <div class="t-card-title">${t.title || 'Tournament'}</div>
                 <span class="badge badge-upcoming"><i class="fas fa-circle" style="font-size:0.4rem;"></i> ${t.status}</span>
@@ -561,16 +282,24 @@
               <div class="t-card-footer">
                 <div>
                   <span style="color:var(--text-dim); font-size:0.8rem;">Entry: </span>
-                  <strong style="color:var(--text-main);">₹${Number(t.entry_fee || 0)}</strong>
+                  <strong style="color:${feeColor};">${fee}</strong>
                   <span style="margin:0 8px; color:var(--border-glass);">|</span>
                   <span style="color:var(--text-dim); font-size:0.8rem;">Prize: </span>
-                  <strong class="prize" style="color:var(--primary-cyan);">₹${Number(t.prize_pool || 0)}</strong>
+                  <strong style="color:var(--primary-cyan);">${prize}</strong>
                 </div>
-                <span class="cyber-btn cyber-btn-sm" style="padding:6px 14px;">Join →</span>
+                <span class="cyber-btn cyber-btn-sm">Join &rarr;</span>
               </div>
             </div>
           `;
         }).join('');
+
+        // Trigger IntersectionObserver on newly added cards
+        if (typeof IntersectionObserver !== 'undefined') {
+          const obs = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+          }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+          document.querySelectorAll('.reveal:not(.visible)').forEach(el => obs.observe(el));
+        }
 
       } catch (e) {
         console.warn('Tournament load failed:', e);
@@ -590,9 +319,9 @@
         const tc = document.getElementById('hero-tournaments');
         const pp = document.getElementById('hero-prize');
 
-        if (pc && playerCount) pc.textContent = (playerCount || 0).toLocaleString() + '+';
-        if (tc && tourneyCount) tc.textContent = (tourneyCount || 0).toLocaleString() + '+';
-        if (pp && totalPrize > 0) pp.textContent = '₹' + (totalPrize >= 1000 ? Math.round(totalPrize / 1000) + 'K+' : totalPrize + '+');
+        if (pc && playerCount) pc.textContent = formatNumber(playerCount) + '+';
+        if (tc && tourneyCount) tc.textContent = formatNumber(tourneyCount) + '+';
+        if (pp && totalPrize > 0) pp.textContent = '&#8377;' + formatNumber(totalPrize) + '+';
       } catch (e) {
         console.warn('Stats load failed:', e);
       }

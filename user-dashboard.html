@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard — FFArena</title>
   <meta name="description" content="Your FFArena dashboard. View stats, join tournaments, manage wallet, and track your progress.">
-  <link rel="stylesheet" href="../assets/css/app.css">
+  <link rel="stylesheet" href="assets/css/app.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     body {
@@ -176,12 +176,12 @@
 
   <!-- Sidebar -->
   <aside class="sidebar">
-    <a href="../index.html" class="sidebar-logo">FF<span class="accent">ARENA</span></a>
+    <a href="index.html" class="sidebar-logo">FF<span class="accent">ARENA</span></a>
     <nav class="nav-menu">
       <a href="user-dashboard.html" class="nav-item active"><i class="fas fa-th-large"></i> Dashboard</a>
       <a href="my-tournaments.html" class="nav-item"><i class="fas fa-trophy"></i> My Tournaments</a>
-      <a href="../tournaments/tournament.html" class="nav-item"><i class="fas fa-list"></i> Browse Tournaments</a>
-      <a href="../tournaments/leaderboard.html" class="nav-item"><i class="fas fa-crown"></i> Leaderboard</a>
+      <a href="tournament.html" class="nav-item"><i class="fas fa-list"></i> Browse Tournaments</a>
+      <a href="leaderboard.html" class="nav-item"><i class="fas fa-crown"></i> Leaderboard</a>
       <a href="team.html" class="nav-item"><i class="fas fa-users"></i> My Squad</a>
       <a href="lfg.html" class="nav-item"><i class="fas fa-search"></i> Find Players</a>
       <a href="settings.html" class="nav-item"><i class="fas fa-cog"></i> Settings</a>
@@ -330,8 +330,18 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../assets/js/supabase.js"></script>
+  <script src="assets/js/supabase.js"></script>
   <script>
+    function formatFee(fee) {
+      var f = Number(fee || 0);
+      return f <= 0 ? '<span style="color:var(--accent-green)">Free</span>' : '&#8377;' + f;
+    }
+    function formatPrize(prize) {
+      var p = Number(prize || 0);
+      if (p <= 0) return '<span style="color:var(--text-dim)">TBD</span>';
+      if (p >= 1000) return '&#8377;' + (p / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+      return '&#8377;' + p;
+    }
     let currentUser, currentProfile;
 
     async function init() {
