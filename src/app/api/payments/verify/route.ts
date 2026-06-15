@@ -1,7 +1,23 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
-import crypto from "crypto"
 import { revalidatePath } from "next/cache"
+
+// Use Web Crypto API (works on Cloudflare Workers + Edge runtime)
+async function verifyHmacSha256(secret: string, message: string, signature: string): Promise<boolean> {
+  const encoder = new TextEncoder()
+  const key = await crypto.subtle.importKey(
+    "raw",
+    encoder.encode(secret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"]
+  )
+  const signatureBuffer = await crypto.subtle.sign("HMAC", key, encoder.encode(message))
+  const generatedSignature = Array.from(new Uint8Array(signatureBuffer))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("")
+  return generatedSignature === signature
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,17 +28,19 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing verification fields" }, { status: 400 })
     }
 
-    // 1. Verify Payment Signature
+    // 1. Verify Payment Signature using Web Crypto
     const keySecret = process.env.RAZORPAY_KEY_SECRET
     if (!keySecret) {
       return NextResponse.json({ error: "Payment verification configuration missing" }, { status: 500 })
     }
 
-    const hmac = crypto.createHmac("sha256", keySecret)
-    hmac.update(`${razorpay_order_id}|${razorpay_payment_id}`)
-    const generatedSignature = hmac.digest("hex")
+    const isValid = await verifyHmacSha256(
+      keySecret,
+      `${razorpay_order_id}|${razorpay_payment_id}`,
+      razorpay_signature
+    )
 
-    if (generatedSignature !== razorpay_signature) {
+    if (!isValid) {
       return NextResponse.json({ error: "Signature verification failed" }, { status: 400 })
     }
 
@@ -53,4 +71,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }
-export const runtime = 'edge';
+
+export const runtime = "edge"
+

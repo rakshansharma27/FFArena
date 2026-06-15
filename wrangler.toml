@@ -1,0 +1,18 @@
+name = "ffarena"
+main = ".open-next/worker.js"
+compatibility_date = "2025-06-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+NEXT_PUBLIC_SUPABASE_URL = "https://krlwdfiuzthiiybheogp.supabase.co"
+NEXT_PUBLIC_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtybHdkZml1enRoaWl5Ymhlb2dwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDkwNTIsImV4cCI6MjA5MjQyNTA1Mn0.bwbYxebY5vuuEDyJYc-Fd96JjiOD8fEgoKDRakqLlIg"
+NEXT_PUBLIC_SITE_URL = "https://ffarena.workers.dev"
+NODE_ENV = "production"
+
+[[rules]]
+type = "ESModule"
+globs = ["**/*.js"]
+
+[assets]
+directory = ".open-next/assets"
+binding = "ASSETS"
