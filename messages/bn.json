@@ -1,0 +1,23 @@
+{
+  "nav": {
+    "home": "হোম",
+    "dashboard": "ড্যাশবোর্ড",
+    "tournaments": "টুর্নামেন্ট",
+    "leaderboard": "লিডারবোর্ড",
+    "logout": "লগআউট",
+    "login": "লগইন",
+    "register": "নিবন্ধন"
+  },
+  "dashboard": {
+    "title": "আমার ড্যাশবোর্ড",
+    "welcome": "স্বাগতম",
+    "active_ads": "সক্রিয় বিজ্ঞাপন বিড",
+    "total_budget": "মোট ব্যয় করা বাজেট",
+    "earnings": "মোট উপার্জন",
+    "quick_stats": "সংক্ষিপ্ত পরিসংখ্যান",
+    "organizer_hub": "আয়োজক হাব",
+    "player_hub": "খেলোয়াড় হাব",
+    "sponsor_hub": "স্পনসর হাব",
+    "account_details": "অ্যাকাউন্টের বিবরণ"
+  }
+}

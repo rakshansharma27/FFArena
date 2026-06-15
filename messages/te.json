@@ -1,0 +1,23 @@
+{
+  "nav": {
+    "home": "హోమ్",
+    "dashboard": "డాష్‌బోర్డ్",
+    "tournaments": "టోర్నమెంట్లు",
+    "leaderboard": "లీడర్‌బోర్డ్",
+    "logout": "లాగ్ అవుట్",
+    "login": "లాగిన్",
+    "register": "రిజిస్టర్"
+  },
+  "dashboard": {
+    "title": "నా డాష్‌బోర్డ్",
+    "welcome": "స్వాగతం",
+    "active_ads": "క్రియాశీల ప్రకటన బిడ్లు",
+    "total_budget": "మొత్తం ఖర్చు చేసిన బడ్జెట్",
+    "earnings": "మొత్తం సంపాదన",
+    "quick_stats": "త్వరిత గణాంకాలు",
+    "organizer_hub": "నిర్వాహకుల హబ్",
+    "player_hub": "ప్లేయర్ హబ్",
+    "sponsor_hub": "స్పాన్సర్ హబ్",
+    "account_details": "ఖాతా వివరాలు"
+  }
+}

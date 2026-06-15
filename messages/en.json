@@ -1,0 +1,23 @@
+{
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "tournaments": "Tournaments",
+    "leaderboard": "Leaderboard",
+    "logout": "Logout",
+    "login": "Login",
+    "register": "Register"
+  },
+  "dashboard": {
+    "title": "My Dashboard",
+    "welcome": "Welcome back",
+    "active_ads": "Active Ads Bids",
+    "total_budget": "Total Budget Spent",
+    "earnings": "Total Earnings",
+    "quick_stats": "Quick Stats",
+    "organizer_hub": "Organizer Hub",
+    "player_hub": "Player Hub",
+    "sponsor_hub": "Sponsor Hub",
+    "account_details": "Account Details"
+  }
+}
