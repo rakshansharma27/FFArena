@@ -1,4 +1,4 @@
-name: Deploy to Cloudflare Pages
+name: Deploy to Cloudflare Pages (ffarena-frontend)
 
 on:
   push:
@@ -25,24 +25,25 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
-      - name: Build for Cloudflare Workers
-        run: npm run cf:build
+      - name: Build with @cloudflare/next-on-pages
+        run: npx @cloudflare/next-on-pages@1
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
-          NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
+          NEXT_PUBLIC_SITE_URL: https://ffarena.live
           SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
-          MONGODB_DB: ${{ secrets.MONGODB_DB }}
+          MONGODB_DB: ffarena
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          JWT_ACCESS_EXPIRES: ${{ secrets.JWT_ACCESS_EXPIRES }}
-          JWT_REFRESH_EXPIRES: ${{ secrets.JWT_REFRESH_EXPIRES }}
+          JWT_ACCESS_EXPIRES: 15m
+          JWT_REFRESH_EXPIRES: 7d
           NODE_ENV: production
 
-      - name: Deploy to Cloudflare Workers
-        run: npx wrangler deploy
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy .vercel/output/static --project-name=ffarena-frontend --branch=main
